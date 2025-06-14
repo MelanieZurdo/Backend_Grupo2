@@ -1,6 +1,7 @@
 // NOTA EQUIPO: Estas son las querys que necesitaría de Libro
 // Lo dejo como borrador hasta que se implemente en Libro
 
+const sql = require('mssql');
 const { getConnection } = require('../database/conexion.js');
 
 const QUERY_FIND_BY_ID = 'SELECT * FROM Libro WHERE IdLibro = @IdLibro';
@@ -20,10 +21,9 @@ const findById = async (idLibro) => {
     return result.recordset[0];
 };
 
-const updateDisponibilidad = async (idLibro, disponibilidad) => {
-    const pool = await getConnection();
-    const result = await pool
-        .request()
+const updateDisponibilidad = async (idLibro, disponibilidad, transaction) => {
+    const request = new sql.Request(transaction);
+    const result = await request
         .input('Disponibilidad', disponibilidad)
         .input('IdLibro', idLibro)
         .query(QUERY_UPDATE_DISPONIBILIDAD);

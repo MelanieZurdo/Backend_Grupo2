@@ -1,11 +1,9 @@
+const sql = require('mssql');
 const { getConnection } = require('../database/conexion.js');
 
-// Consultas SQL
-const QUERY_FIND_ALL = 'SELECT * FROM Prestamo';
+const QUERY_FIND_BY_FILTERS = 'SELECT * FROM Prestamo WHERE 1=1';
 const QUERY_FIND_BY_ID = 'SELECT * FROM Prestamo WHERE IdPrestamo = @IdPrestamo';
-const QUERY_FIND_BY_USUARIO = 'SELECT * FROM Prestamo WHERE IdUsuario = @IdUsuario';
-const QUERY_FIND_BY_LIBRO = 'SELECT * FROM Prestamo WHERE IdLibro = @IdLibro';
-const QUERY_FIND_BY_ACTIVO = 'SELECT * FROM Prestamo WHERE Activo = @Activo';
+const QUERY_DELETE = 'DELETE FROM Prestamo WHERE IdPrestamo = @IdPrestamo';
 const QUERY_INSERT = `
     INSERT INTO Prestamo (IdUsuario, IdLibro, FechaPrestamo)
     OUTPUT INSERTED.*
@@ -17,12 +15,31 @@ const QUERY_UPDATE = `
     OUTPUT INSERTED.*
     WHERE IdPrestamo = @IdPrestamo
 `;
-const QUERY_DELETE = 'DELETE FROM Prestamo WHERE IdPrestamo = @IdPrestamo';
 
+const findByFilters = async (filters) => {
+    let query = QUERY_FIND_BY_FILTERS;
+    const params = {};
 
-const findAll = async () => {
+    if (filters.idUsuario) {
+        query += ' AND IdUsuario = @IdUsuario';
+        params.IdUsuario = filters.idUsuario;
+    }
+    if (filters.idLibro) {
+        query += ' AND IdLibro = @IdLibro';
+        params.IdLibro = filters.idLibro;
+    }
+    if (filters.activo !== undefined) {
+        query += ' AND Activo = @Activo';
+        params.Activo = filters.activo;
+    }
+
     const pool = await getConnection();
-    const result = await pool.request().query(QUERY_FIND_ALL);
+    let request = pool.request();
+    Object.entries(params).forEach(([key, value]) => {
+        request = request.input(key, value);
+    });
+
+    const result = await request.query(query);
     return result.recordset;
 };
 
@@ -35,47 +52,18 @@ const findById = async (idPrestamo) => {
     return result.recordset[0];
 };
 
-const findByUsuario = async (idUsuario) => {
-    const pool = await getConnection();
-    const result = await pool
-        .request()
-        .input('IdUsuario', idUsuario)
-        .query(QUERY_FIND_BY_USUARIO);
-    return result.recordset;
-};
-
-const findByLibro = async (idLibro) => {
-    const pool = await getConnection();
-    const result = await pool
-        .request()
-        .input('IdLibro', idLibro)
-        .query(QUERY_FIND_BY_LIBRO);
-    return result.recordset;
-};
-
-const findByEstado = async (activo) => {
-    const pool = await getConnection();
-    const result = await pool
-        .request()
-        .input('Activo', activo)
-        .query(QUERY_FIND_BY_ACTIVO);
-    return result.recordset;
-};
-
-const save = async ({ idUsuario, idLibro }) => {
-    const pool = await getConnection();
-    const insertResult = await pool
-        .request()
+const save = async ({ idUsuario, idLibro }, transaction) => {
+    const request = new sql.Request(transaction);
+    const insertResult = await request
         .input('IdUsuario', idUsuario)
         .input('IdLibro', idLibro)
         .query(QUERY_INSERT);
     return insertResult.recordset[0];
 };
 
-const update = async (idPrestamo, activo) => {
-    const pool = await getConnection();
-    const result = await pool
-        .request()
+const update = async (idPrestamo, activo, transaction) => {
+    const request = new sql.Request(transaction);
+    const result = await request
         .input('IdPrestamo', idPrestamo)
         .input('Activo', activo)
         .query(QUERY_UPDATE);
@@ -91,12 +79,9 @@ const deleteById = async (idPrestamo) => {
 };
 
 module.exports = {
-    findAll,
+    findByFilters,
     findById,
-    findByUsuario,
-    findByLibro,
-    findByEstado,
     save,
     update,
-    deleteById
+    deleteById,
 };
