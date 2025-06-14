@@ -1,0 +1,160 @@
+@baseUrl = http://127.0.0.1:3000
+
+### Obtener todos los préstamos (sin filtros)
+GET {{baseUrl}}/prestamos
+
+###
+
+### Obtener préstamos filtrando por idUsuario
+GET {{baseUrl}}/prestamos?idUsuario=1
+
+###
+
+### Obtener préstamos filtrando por idLibro
+GET {{baseUrl}}/prestamos?idLibro=2
+
+###
+
+### Obtener préstamos filtrando por activo (true)
+GET {{baseUrl}}/prestamos?activo=true
+
+###
+
+### Obtener préstamos filtrando por varios parámetros
+GET {{baseUrl}}/prestamos?idUsuario=1&idLibro=2&activo=false
+
+###
+
+### Bad Request: idUsuario inválido (no numérico)
+GET {{baseUrl}}/prestamos?idUsuario=abc
+
+###
+
+### Bad Request: activo inválido (no booleano)
+GET {{baseUrl}}/prestamos?activo=notabool
+
+###
+
+### Crear un préstamo: caso exitoso
+POST {{baseUrl}}/prestamos
+Content-Type: application/json
+
+{
+  "idLibro": 1,
+  "idUsuario": 2
+}
+
+###
+
+### Conflict: libro ya prestado (correr después de crear un préstamo)
+POST {{baseUrl}}/prestamos
+Content-Type: application/json
+
+{
+  "idLibro": 1,
+  "idUsuario": 2
+}
+
+###
+
+### Bad Request: falta campo idUsuario
+POST {{baseUrl}}/prestamos
+Content-Type: application/json
+
+{
+  "idLibro": 1
+}
+
+###
+
+### Not Found: no se encontró idLibro
+POST {{baseUrl}}/prestamos
+Content-Type: application/json
+
+{
+  "idLibro": 1000,
+  "idUsuario": 2
+}
+
+###
+
+### Not Found: no se encontró idUsuario
+POST {{baseUrl}}/prestamos
+Content-Type: application/json
+
+{
+  "idLibro": 1,
+  "idUsuario": 1000
+}
+
+###
+
+### Actualizar estado de préstamo: caso exitoso (colocar el ID de un préstamo existente)
+PATCH {{baseUrl}}/prestamos/1
+Content-Type: application/json
+
+{
+  "activo": false
+}
+
+###
+
+### Conflict: préstamo no activo (colocar el ID de un préstamo activo = false)
+PATCH {{baseUrl}}/prestamos/1
+Content-Type: application/json
+
+{
+  "activo": false
+}
+
+###
+
+### Not Found: idPrestamo no encontrado
+PATCH {{baseUrl}}/prestamos/1000
+Content-Type: application/json
+
+{
+  "activo": false
+}
+
+###
+
+### Bad Request: idPrestamo no numérico
+PATCH {{baseUrl}}/prestamos/abc
+Content-Type: application/json
+
+{
+  "activo": false
+}
+
+###
+
+### Bad Request: activo no es booleano
+PATCH {{baseUrl}}/prestamos/1
+Content-Type: application/json
+
+{
+  "activo": "abc"
+}
+
+###
+
+### Eliminar un préstamo: caso exitoso
+DELETE {{baseUrl}}/prestamos/1
+
+###
+
+### Not Found: idPrestamo no encontrado
+DELETE {{baseUrl}}/prestamos/9999
+
+###
+
+### Bad Resquest: idPrestamo no numérico
+DELETE {{baseUrl}}/prestamos/abc
+
+###
+
+### Conflict: prestamo activo (colocar el ID de un préstamo activo = true)
+DELETE {{baseUrl}}/prestamos/5
+
+###
