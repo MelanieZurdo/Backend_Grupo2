@@ -1,18 +1,19 @@
-//const { infoBiblioteca } = require('../src/InfoBiblioteca')
+const { infoBiblioteca } = require('../src/InfoBiblioteca')
 const { getSQLConnection } = require('../database/conexion')
+const queries = require('../database/librosQueries')
+const sql = require('mssql');
 
 //Obtengo todos los libros
 exports.getAllBooksRepository = async () => {
     const pool = await getSQLConnection()
     try {
-        const resultado = await pool.request().query("Select TOP 3 * from Libro")
+        const resultado = await pool.request().query(queries.getAllBooks)
         console.table(resultado.recordset)
         return resultado.recordset
 
     } catch (error) {
         console.log("Error en getAllBooksRepository - Repository " + error)
         throw Error("Error en getAllBooksRepository - Repository " + error)
-
     }
 }
 
@@ -39,9 +40,22 @@ exports.getBooksByIdRepository = async (id_librosolicitado) => {
 //Creo un nuevo libro
 
 exports.postNewBookRepository = async (libroNuevo) => {
+    const { Titulo, IdAutor, FechaPublicacion, Genero, Disponibilidad } = libroNuevo
+    const pool = await getSQLConnection()
+
     try {
-        await infoBiblioteca.libros.push(libroNuevo)
-        return JSON.stringify(infoBiblioteca.libros)
+        const resultado = await pool.request()
+            .input('Titulo', sql.NVarChar, Titulo)
+            .input('IdAutor', sql.Int, IdAutor)
+            .input('FechaPublicacion', sql.Date, FechaPublicacion)
+            .input('Genero', sql.NVarChar, Genero)
+            .input('Disponibilidad', sql.Bit, Disponibilidad)
+            .query(queries.postNewBook)
+
+        const libroAgregado = { Titulo, IdAutor, FechaPublicacion, Genero, Disponibilidad }
+        console.log(libroAgregado)
+
+        return resultado.recordset
 
     } catch (error) {
         console.log("Error en postNewBookRepository - Repository " + error)
