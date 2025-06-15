@@ -1,0 +1,34 @@
+### Obtengo todos los libros de la biblioteca
+GET http://127.0.0.1:3000/api/libro HTTP/1.1
+
+### Obtengo libro por id
+GET http://127.0.0.1:3000/api/libros/4 HTTP/1.1
+
+### Publico un nuevo libro
+POST http://127.0.0.1:3000/api/libros HTTP/1.1
+Content-Type: application/json
+
+{
+  "id_libro": 11,
+  "titulo": "La isla bajo el mar",
+  "año_publicacion": 2009,
+  "genero": "Ficción histórica",
+  "id_autor": 2
+}
+
+### Modifico un libro por id
+PUT http://127.0.0.1:3000/api/libros/40 HTTP/1.1
+Content-Type: application/json
+
+{
+  "id_libro": 11,
+  "titulo": "Indias Blancas",
+  "año_publicacion": 2005,
+  "genero": "Ficción histórica",
+  "id_autor": 11
+}
+
+
+
+
+
