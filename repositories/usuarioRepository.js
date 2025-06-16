@@ -49,51 +49,23 @@ exports.getUsuarioByIdRepository = async (id) => {//buscar por ID
     }
 }
 
-/*exports.getFrontendLanguagesFilteredRepository = (lenguaje, orderBy) => {
-    console.log(`REPOSITORY - getFrontendLanguagesFiltered - lenguaje:${lenguaje} - orderBy:${orderBy}`)
-    const filtrado = frontend.filter(
-        lenguajes => lenguajes.nombre.toLocaleLowerCase() === lenguaje.toLocaleLowerCase()
-    )
-
-    console.log("El valor del query param ordenar es:", orderBy)
-    //console.log("Los lenguajes filtrados son: ",filtrado)
-
-    if(filtrado.length === 0){
-        return []
-    }
-
-    if(orderBy === "arriba"){
-        return filtrado.sort(
-            (a,b) => b.cantidadAlumnos - a.cantidadAlumnos
-        )
-    }else if (orderBy === "abajo"){
-        return filtrado.sort(
-            (a,b) => a.cantidadAlumnos - b.cantidadAlumnos
-        )
-    }else{
-        return filtrado
-    }
-}
-
-exports.createNewFrontendLanguageRepository = async (language) => {
-    const { materia_id, nombre, turno_id , comision_id , cantidad_alumnos } = language;
-    const pool = await getSQLConnection();
+exports.createUsuarioRepository = async (usuario) => {
+    const { NombreUsuario, Correo, Direccion, FechaRegistro } = usuario;
+    const pool = await getConnection();
 
     try {
-        console.log(`REPOSITORY  - createNewFrontendLanguage - language:${language}`)
 
-        const resultado = await pool.request()
-        .input('materia_id', sql.Int, materia_id)
-        .input('nombre', sql.NVarChar, nombre)
-        .input('turno_id', sql.Int, turno_id)
-        .input('comision_id', sql.Int, comision_id)
-        .input('cantidad_alumnos', sql.Int, cantidad_alumnos)
-        .query(queries.addLenguaje)
+        const usuarioNuevo = await pool.request()
+        .input('NombreUsuario', sql.NVarChar, NombreUsuario)
+        .input('Correo', sql.NVarChar, Correo)
+        .input('Direccion', sql.NVarChar, Direccion)
+        .input('FechaRegistro', sql.Date, FechaRegistro)
+        .query(queries.addUsuario)
 
-        const lenguajeNuevo = { materia_id, nombre, turno_id , comision_id , cantidad_alumnos }
-        console.table(lenguajeNuevo)
+        const nuevousuario = { NombreUsuario, Correo, Direccion, FechaRegistro   }
+        console.table(nuevousuario)
 
-        return resultado.recordset
+        return usuarioNuevo.recordset
     } catch (error) {
         console.log("createNewFrontendLanguageRepository - " + error)
         throw Error("Error al intentar crear el nuevo lenguaje: - " + error)
@@ -102,56 +74,52 @@ exports.createNewFrontendLanguageRepository = async (language) => {
     }
 }
 
+exports.updateUsuarioRepository = async (id, usuarioEditado) => {
 
-exports.updateFrontendLanguageItemRepository = async (id, lenguajeActualizado) => {
-    console.log(`REPOSITORY  - updateFrontendLanguageItem - id:${id} - lenguajeActualizado:${JSON.stringify(lenguajeActualizado)}`)
-
-    const { materia_id, nombre, turno_id, comision_id, cantidad_alumnos } = lenguajeActualizado;
-    const pool = await getSQLConnection();
+    const { NombreUsuario, Correo, Direccion, FechaRegistro } = usuarioEditado;
+    const pool = await getConnection();
 
     try {
 
-        await pool.request().query('USE IFTS11')
+        await pool.request().query('USE BIBLIOTECA')
 
-        let queryActualizada = 'UPDATE Lenguajes SET ';
+        let queryActualizada = 'UPDATE Usuario SET ';
         const requestActualizado = pool.request().input('id', sql.Int, id)
-        if (materia_id != null) {
-            requestActualizado.input('materia_id', sql.Int, materia_id)
-            queryActualizada += 'materia_id = @materia_id, '
+        if (NombreUsuario != null) {
+            requestActualizado.input('NombreUsuario', sql.NVarChar, NombreUsuario)
+            queryActualizada += 'NombreUsuario = @NombreUsuario, '
         }
-        if (nombre != null) {
-            requestActualizado.input('nombre', sql.NVarChar, nombre)
-            queryActualizada += 'nombre = @nombre, '
+        if (Correo != null) {
+            requestActualizado.input('Correo', sql.NVarChar, Correo)
+            queryActualizada += 'Correo = @Correo, '
         }
-        if (turno_id != null) {
-            requestActualizado.input('turno_id', sql.Int, turno_id)
-            queryActualizada += 'turno_id = @turno_id, '
+        if (Direccion != null) {
+            requestActualizado.input('Direccion', sql.NVarChar, Direccion)
+            queryActualizada += 'Direccion = @Direccion, '
         }
-        if (comision_id != null) {
-            requestActualizado.input('comision_id', sql.Int, comision_id)
-            queryActualizada += 'comision_id = @comision_id, '
-        }
-        if (cantidad_alumnos != null) {
-            requestActualizado.input('cantidad_alumnos', sql.Int, cantidad_alumnos)
-            queryActualizada += 'cantidad_alumnos = @cantidad_alumnos'
+        if (FechaRegistro != null) {
+            requestActualizado.input('FechaRegistro', sql.Date, FechaRegistro)
+            queryActualizada += 'FechaRegistro = @FechaRegistro, '
         }
 
         //console.log(queryActualizada)
         queryActualizada = queryActualizada.trim().replace(/,$/, '')
         //console.log(queryActualizada)
-        queryActualizada += ' WHERE id = @id'
+        queryActualizada += ' WHERE IdUsuario = @id'
         //console.log(queryActualizada)
 
-        const lenguajeActualizado = await requestActualizado.query(queryActualizada)
+        const usuarioActualizado = await requestActualizado.query(queryActualizada)
 
-        if (lenguajeActualizado.rowsAffected[0] == 0) {
+        if (usuarioActualizado.rowsAffected[0] == 0) {
             return null
         }
 
-        return { materia_id, nombre, turno_id, comision_id, cantidad_alumnos }
+        return { NombreUsuario, Correo, Direccion, FechaRegistro }
     } catch (error) {
         console.log("updateFrontendLanguageItemRepository - " + error)
         throw Error("Error al intentar actualizar el lenguaje: - " + error)
     } finally {
         pool.close()
-    }*/
+    }
+}
+
