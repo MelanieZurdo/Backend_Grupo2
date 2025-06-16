@@ -3,7 +3,7 @@ const { getSQLConnection } = require('../database/conexion')
 const queries = require('../database/librosQueries')
 const sql = require('mssql');
 
-//Obtengo todos los libros
+//Obtengo todos los libros SQL
 exports.getAllBooksRepository = async () => {
     const pool = await getSQLConnection()
     try {
@@ -15,30 +15,12 @@ exports.getAllBooksRepository = async () => {
         console.log("Error en getAllBooksRepository - Repository " + error)
         throw Error("Error en getAllBooksRepository - Repository " + error)
     }
-}
-
-//Obtengo libro por ID
-exports.getBooksByIdRepository = async (id_librosolicitado) => {
-    try {
-        const librosFiltrados = await infoBiblioteca.libros.filter(libro => {
-            return libro.id_libro == id_librosolicitado
-        })
-
-        if (librosFiltrados.length === 0) {
-            return []
-        }
-        else {
-            return librosFiltrados
-        }
-
-    } catch (error) {
-        console.log("Error en getBooksByIdRepository - Repository " + error)
-        throw Error("Error en getBooksByIdRepository - Repository " + error)
+    finally{
+        pool.close()
     }
 }
 
-//Creo un nuevo libro
-
+//Creo un nuevo libro SQL
 exports.postNewBookRepository = async (libroNuevo) => {
     const { Titulo, IdAutor, FechaPublicacion, Genero, Disponibilidad } = libroNuevo
     const pool = await getSQLConnection()
@@ -52,14 +34,75 @@ exports.postNewBookRepository = async (libroNuevo) => {
             .input('Disponibilidad', sql.Bit, Disponibilidad)
             .query(queries.postNewBook)
 
-        const libroAgregado = { Titulo, IdAutor, FechaPublicacion, Genero, Disponibilidad }
-        console.log(libroAgregado)
-
+        console.log(resultado.recordset)
         return resultado.recordset
 
     } catch (error) {
         console.log("Error en postNewBookRepository - Repository " + error)
         throw Error("Error en postNewBookRepository - Repository " + error)
+    }
+    finally{
+        pool.close()
+    }
+}
+
+//Modifico disponibilidad del libro mediante su ID SQL
+exports.putBookAvailabilityRepository = async (IdLibro, libroActualizado) => {
+    const { Disponibilidad } = libroActualizado;
+    const pool = await getSQLConnection();
+
+    try {
+        if (Disponibilidad == null) {
+            console.log("No se proporcionó disponibilidad");
+            return [];
+        }
+
+        const request = pool.request()
+            .input('IdLibro', sql.Int, IdLibro)
+            .input('Disponibilidad', sql.Bit, Disponibilidad);
+
+        const resultado = await request.query(queries.putBookAvailability);
+        
+
+        if (resultado.rowsAffected[0] === 0) {
+            console.log("No se ha podido modificar la disponibilidad del libro");
+            return [];
+        }
+
+        console.log("Se ha modificado la disponibilidad del libro");
+        return resultado.recordset;
+
+    } catch (error) {
+        console.log("Error en putBookAvailability - Repository " + error);
+        throw Error("Error en putBookAvailability - Repository " + error);
+    } finally {
+        pool.close();
+    }
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//No SQL aún
+
+//Obtengo libro por ID
+exports.getBooksByIdRepository = async (id_librosolicitado) => {
+    try {
+        const librosFiltrados = await infoBiblioteca.libros.filter(libro => {
+            return libro.id_libro == id_librosolicitado
+        })
+
+        if (librosFiltrados.length === 0) {
+            return []
+        }
+        else {
+            console.table(librosFiltrados)
+            return librosFiltrados
+        }
+
+    } catch (error) {
+        console.log("Error en getBooksByIdRepository - Repository " + error)
+        throw Error("Error en getBooksByIdRepository - Repository " + error)
     }
 }
 
@@ -81,5 +124,64 @@ exports.putBookRepository = async (id_libroAModificar, libroNuevo) => {
         throw Error("Error en putBookRepository - Repository " + error)
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* exports.putBookAvailabilityRepository = async (IdLibro, libroActualizado) => {
+    const { Disponibilidad } = libroActualizado;
+    const pool = await getSQLConnection();
+
+    try {
+
+        await pool.request().query('USE Biblioteca')
+
+        let queryActualizada = 'UPDATE Libro SET ';
+        const requestActualizado = pool.request().input('IdLibro', sql.Int, IdLibro)
+
+        if (Disponibilidad != null) {
+            requestActualizado.input('Disponibilidad', sql.Bit, Disponibilidad)
+            queryActualizada += 'Disponibilidad = @Disponibilidad'
+        }
+       
+        queryActualizada = queryActualizada.trim().replace(/,$/, '')        
+        queryActualizada += ' WHERE IdLibro = @IdLibro'        
+
+        const libroActualizado = await requestActualizado.query(queryActualizada)
+
+        if (libroActualizado.rowsAffected[0] == 0) {
+            return []
+        }
+        return { Disponibilidad }
+    } catch (error) {
+        console.log("Error en putBookAvailability - Repository " + error)
+        throw Error("Error en putBookAvailability - Repository " + error)
+    }
+    finally{
+        pool.close()
+    }
+} */
 
 

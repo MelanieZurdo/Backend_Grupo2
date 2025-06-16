@@ -1,34 +1,49 @@
-### Obtengo todos los libros de la biblioteca
+### Obtengo todos los libros SQL
 GET http://127.0.0.1:3000/api/libros HTTP/1.1
 
-### Obtengo libro por id
-GET http://127.0.0.1:3000/api/libros/4 HTTP/1.1
-
-### Publico un nuevo libro
+### Creo un nuevo libro SQL
 POST http://127.0.0.1:3000/api/libros HTTP/1.1
 Content-Type: application/json
 
 {
-  "Titulo": "Cuentos de lo grotesco y arabesco",
-  "IdAutor": 7,
-  "FechaPublicacion": "1840-12-01",
-  "Genero": "Terror",
+  "Titulo": "Largo pétalo de mar",
+  "IdAutor": 2,
+  "FechaPublicacion": "2019-05-01",
+  "Genero": "Ficción histórica",
+  "Disponibilidad": 1
+}
+
+### Modifico disponibilidad del libro mediante su ID SQL
+PUT http://127.0.0.1:3000/api/libros/disponibilidad/22 HTTP/1.1
+Content-Type: application/json
+
+{
+  "Disponibilidad": 0
+}
+
+### Obtengo libro por ID SQL
+GET http://127.0.0.1:3000/api/libros/4 HTTP/1.1
+
+
+
+### Modifico un libro mediante su ID SQL
+PUT http://127.0.0.1:3000/api/libros/2 HTTP/1.1
+Content-Type: application/json
+
+{
+  "Titulo": "Paula",
+  "IdAutor": 2,
+  "FechaPublicacion": "1994-01-01",
+  "Genero": "Autobiografía",
   "Disponibilidad": 1
 }
 
 
 
-### Modifico un libro por id
-PUT http://127.0.0.1:3000/api/libros/40 HTTP/1.1
-Content-Type: application/json
 
-{
-  "id_libro": 11,
-  "titulo": "Indias Blancas",
-  "año_publicacion": 2005,
-  "genero": "Ficción histórica",
-  "id_autor": 11
-}
+
+
+
 
 
 
