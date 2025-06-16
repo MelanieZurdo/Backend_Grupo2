@@ -95,7 +95,7 @@ exports.updateBookById = async (req,res) => {
         if (libroModificado.length === 0) {
             res.setHeader('Content-Type', 'text/plain')
             res.status(404)
-            res.send('No se ha podido modificar la disponibilidad del libro')
+            res.send('No se han podido modificar los datos del libro')
         }
         else {
             res.setHeader('Content-Type', 'application/json')
@@ -105,7 +105,7 @@ exports.updateBookById = async (req,res) => {
     } catch (error) {
         res.setHeader('Content-Type', 'text/plain')
         res.status(500)
-        res.send("No se ha podido modificar los datos del libro")
+        res.send("No se han podido modificar los datos del libro")
         console.log("Error en updateBookById - Controller " + error)
     }
 }

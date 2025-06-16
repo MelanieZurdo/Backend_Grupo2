@@ -1,4 +1,3 @@
-const { infoBiblioteca } = require('../src/InfoBiblioteca')
 const { getSQLConnection } = require('../database/conexion')
 const queries = require('../database/librosQueries')
 const sql = require('mssql');
@@ -107,7 +106,7 @@ exports.putBookByIdRepository = async (IdLibro, libroActualizado) => {
 
     try {
 
-        const resultado = await pool.request().
+        let resultado = await pool.request().
         input('IdLibro', sql.Int, IdLibro)
 
         if (Titulo != null) {
@@ -126,13 +125,13 @@ exports.putBookByIdRepository = async (IdLibro, libroActualizado) => {
             resultado.input('Disponibilidad', sql.Int, Disponibilidad)            
         }
 
-        resultado = resultado.query(queries.updateBook)
+        resultado = await resultado.query(queries.updateBook)
 
         console.table(resultado.recordset)
         return resultado.recordset
     } catch (error) {
-        console.log("Error en putBookRepository - " + error)
-        throw Error("Error al intentar actualizar el libro: - " + error)
+        console.log("Error en putBookRepository - Repository " + error)
+        throw Error("Error en putBookRepository - Repository " + error)
     } finally {
         pool.close()
     }

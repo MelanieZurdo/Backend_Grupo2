@@ -19,7 +19,7 @@ librosRouter.put('/disponibilidad/:IdLibro', librosController.updateBookAvailabi
 librosRouter.get('/autor/:IdAutor', librosController.readBooksByIdAuthor)
 
 //Actualizar los datos de un libro por su ID - SQL
-librosRouter.put('/:IdLibro', librosController.updateBookAvailability)
+librosRouter.put('/:IdLibro', librosController.updateBookById)
 
 
 
