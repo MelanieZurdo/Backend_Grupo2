@@ -36,7 +36,7 @@ exports.createNewBook = async (req, res) => {
 
 exports.updateBookAvailability = async (req, res) => {
     try {
-        const IdLibro = req.params.id_Libro;
+        const IdLibro = req.params.IdLibro;
         const libroActualizado = req.body;
 
         const libros = await librosService.putBookAvailability(IdLibro, libroActualizado)
@@ -59,59 +59,54 @@ exports.updateBookAvailability = async (req, res) => {
     }
 }
 
-//Obtengo libro por ID SQL
-exports.readBooksById = async (req, res) => {
+//Obtener todos los libros de un autor por (IdAutor) y la informacion del mismo.
+exports.readBooksByIdAuthor = async (req,res) => {
     try {
-        const id_librosolicitado = req.params.id_Libro
+        const IdAutor = req.params.IdAutor;        
 
-        const librosById = await librosService.getBooksById(id_librosolicitado)
+        const booksByAuthor = await librosService.getBooksByIdAuthor(IdAutor)
 
-        if (librosById.length === 0) {
+        if (booksByAuthor.length === 0) {
             res.setHeader('Content-Type', 'text/plain')
             res.status(404)
-            res.send('No existe un libro con ese ID')
+            res.send('No se han podido obtener los libros por id del autor y su información')
         }
         else {
             res.setHeader('Content-Type', 'application/json')
             res.status(200)
-            res.send(librosById)
+            res.send(booksByAuthor)
         }
-
     } catch (error) {
         res.setHeader('Content-Type', 'text/plain')
         res.status(500)
-        res.send("No se han podido obtener el libro por ID")
-        console.log("Error en readBooksById - Controller " + error)
+        res.send("No se han podido obtener los libros por id del autor y su información")
+        console.log("Error en readBooksByIdAuthor - Controller " + error)
     }
 }
 
-
-
-//Modifico toda la informacion del libro por ID SQL
-exports.updateBook = async (req, res) => {
+//Actualizar los datos de un libro por su ID - SQL
+exports.updateBookById = async (req,res) => {
     try {
-        const id_libroAModificar = req.params.id_Libro
-        const libroNuevo = req.body
-        const libroModificado = await librosService.putBook(id_libroAModificar, libroNuevo)
+        const IdLibro = req.params.IdLibro;
+        const libroActualizado = req.body;
 
-        if (libroModificado.length == 0) {
+        const libroModificado = await librosService.putBookById(IdLibro, libroActualizado)
+
+        if (libroModificado.length === 0) {
             res.setHeader('Content-Type', 'text/plain')
             res.status(404)
-            res.send('No existe un libro con ese ID a modificar')
-
+            res.send('No se ha podido modificar la disponibilidad del libro')
         }
         else {
             res.setHeader('Content-Type', 'application/json')
             res.status(200)
             res.send(libroModificado)
-
         }
-
     } catch (error) {
         res.setHeader('Content-Type', 'text/plain')
         res.status(500)
-        res.send("No se ha podido modificar el libro")
-        console.log("Error en updateBook - Controller " + error)
+        res.send("No se ha podido modificar los datos del libro")
+        console.log("Error en updateBookById - Controller " + error)
     }
 }
 

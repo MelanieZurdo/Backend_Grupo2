@@ -24,7 +24,7 @@ exports.postNewBook = async (libroNuevo) => {
 
 //Modifico disponibilidad del libro mediante su ID SQL
 exports.putBookAvailability = async (IdLibro, libroActualizado) => {
-    try {        
+    try {
         return await librosRepository.putBookAvailabilityRepository(IdLibro, libroActualizado)
     } catch (error) {
         console.log("Error en putBookAvailability - Service " + error)
@@ -32,31 +32,23 @@ exports.putBookAvailability = async (IdLibro, libroActualizado) => {
     }
 }
 
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-//No SQL aún
-
-//Obtengo libro por ID
-exports.getBooksById = async (id_librosolicitado) => {
-    try {
-        return await librosRepository.getBooksByIdRepository(id_librosolicitado)
-
-    } catch (error) {
-        console.log("Error en getBooksById - Service " + error)
-        throw Error("Error en getBooksById - Service " + error)
+//Obtener todos los libros de un autor por (IdAutor) y la informacion del mismo.
+exports.getBooksByIdAuthor = async (IdAutor) => {
+    try {   
+            return await librosRepository.getBooksByIdAuthorRepository(IdAutor)
+        }
+    catch (error) {
+        console.log("Error en getBooksByIdAuthor - Repository " + error)
+        throw Error("Error en getBooksByIdAuthor - Repository " + error)
     }
 }
 
-//Modifico un libro por id
-exports.putBook = async (id_libroAModificar, libroNuevo) => {
-    try {
-        return await librosRepository.putBookRepository(id_libroAModificar, libroNuevo)
-
+//Actualizar los datos de un libro por su ID - SQL
+exports.putBookById = async (IdLibro, libroActualizado) => {
+        try {
+        return await librosRepository.putBookByIdRepository(IdLibro, libroActualizado)
     } catch (error) {
-        console.log("Error en putBook - Service " + error)
-        throw Error("Error en putBook - Service " + error)
+        console.log("Error en putBookById - Service " + error)
+        throw Error("Error en el service: " + error)
     }
 }
-

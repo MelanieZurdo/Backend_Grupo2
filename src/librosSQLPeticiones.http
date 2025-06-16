@@ -14,19 +14,17 @@ Content-Type: application/json
 }
 
 ### Modifico disponibilidad del libro mediante su ID SQL
-PUT http://127.0.0.1:3000/api/libros/disponibilidad/22 HTTP/1.1
+PUT http://127.0.0.1:3000/api/libros/disponibilidad/7 HTTP/1.1
 Content-Type: application/json
 
 {
-  "Disponibilidad": 0
+  "Disponibilidad": 1
 }
 
-### Obtengo libro por ID SQL
-GET http://127.0.0.1:3000/api/libros/4 HTTP/1.1
+### Obtener todos los libros de un autor por (IdAutor) y la informacion del mismo.
+GET http://127.0.0.1:3000/api/libros/autor/5 HTTP/1.1
 
-
-
-### Modifico un libro mediante su ID SQL
+### Modifico un libro mediante su ID
 PUT http://127.0.0.1:3000/api/libros/2 HTTP/1.1
 Content-Type: application/json
 
