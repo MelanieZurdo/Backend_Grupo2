@@ -1,0 +1,20 @@
+@api = http://127.0.0.1:3000/api
+
+GET {{api}}/autor HTTP/1.1
+
+###
+
+
+POST {{api}}/autor HTTP/1.1
+
+Content-Type: application/json
+
+{
+    
+    "NombreAutor": "Pepe",
+    "Nacionalidad": "Uruguay",
+    "FechaNacimiento": "1940-09-03T00:00:00.000Z"
+
+}
+
+###
