@@ -84,13 +84,13 @@ exports.readBooksByIdAuthor = async (req, res) => {
     }
 }
 
-//Actualizar los datos de un libro por su ID - SQL
-exports.updateBookById = async (req, res) => {
+//Modifico items de manera opcional de un libro mediante su ID - SQL
+exports.updateBookItemById = async (req, res) => {
     try {
         const IdLibro = req.params.IdLibro;
         const libroActualizado = req.body;
 
-        const libroModificado = await librosService.putBookById(IdLibro, libroActualizado)
+        const libroModificado = await librosService.putBookItemById(IdLibro, libroActualizado)
 
         if (libroModificado.length === 0) {
             res.setHeader('Content-Type', 'text/plain')

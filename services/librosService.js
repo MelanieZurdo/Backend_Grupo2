@@ -43,10 +43,10 @@ exports.getBooksByIdAuthor = async (IdAutor) => {
     }
 }
 
-//Actualizar los datos de un libro por su ID - SQL
-exports.putBookById = async (IdLibro, libroActualizado) => {
+//Modifico items de manera opcional de un libro mediante su ID - SQL
+exports.putBookItemById = async (IdLibro, libroActualizado) => {
     try {
-        return await librosRepository.putBookByIdRepository(IdLibro, libroActualizado)
+        return await librosRepository.putBookItemsByIdRepository(IdLibro, libroActualizado)
     } catch (error) {
         console.log("Error en putBookById - Service " + error)
         throw Error("Error en el service: " + error)

@@ -19,15 +19,5 @@ module.exports = {
     FROM BIBLIOTECA.dbo.LIBRO L
     inner join Autor A
     on L.IdAutor=A.IdAutor
-    where L.IdAutor=@IdAutor`,
-    updateBook: `UPDATE BIBLIOTECA.dbo.LIBRO
-    SET 
-        Titulo = @Titulo,
-        IdAutor = @IdAutor,
-        FechaPublicacion = @FechaPublicacion,
-        Genero = @Genero,
-        Disponibilidad = @Disponibilidad
-    OUTPUT INSERTED.*
-    WHERE IdLibro = @IdLibro;`,
-
+    where L.IdAutor=@IdAutor`
 }

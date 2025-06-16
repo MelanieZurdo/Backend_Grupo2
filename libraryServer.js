@@ -1,8 +1,10 @@
 const express = require('express')
 const app = express()
+app.use(express.static('src'));
 const dotenv = require('dotenv')
-const routerBooks = require('./routers/librosRouter');
 const librosRouter = require('./routers/librosRouter');
+const fs = require('node:fs')
+const HOME = fs.readFileSync('./src/index.html');
 
 dotenv.config();
 
@@ -13,12 +15,36 @@ const PORT = process.env.PORT_EXPRESS
 
 app.use('/api/libros', librosRouter)
 
+app.get('/api', (req, res) => {
+    res.setHeader('Content-Type', 'text/html')
+    res.status(200)
+    res.send(HOME)
+})
+
 app.listen(PORT, HOSTNAME, () => {
-    console.log(`El servidor esta corriendo en: http://${HOSTNAME}:${PORT}`)
+    console.log(`El servidor esta corriendo en: http://${HOSTNAME}:${PORT}/api`)
 })
 
 app.get('/{*any}', (req, res) => {
     res.setHeader('Content-Type', 'text/plain')
     res.status(404)
-    res.send("La ruta a la cual quiero ingresar no existe")
+    res.send("La ruta ingresada no es valida")
+})
+
+app.put('/{*any}', (req, res) => {
+    res.setHeader('Content-Type', 'text/plain')
+    res.status(404)
+    res.send("La ruta ingresada no es valida")
+})
+
+app.post('/{*any}', (req, res) => {
+    res.setHeader('Content-Type', 'text/plain')
+    res.status(404)
+    res.send("La ruta ingresada no es valida")
+})
+
+app.delete('/{*any}', (req, res) => {
+    res.setHeader('Content-Type', 'text/plain')
+    res.status(404)
+    res.send("La ruta ingresada no es valida")
 })

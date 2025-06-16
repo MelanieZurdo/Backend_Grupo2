@@ -96,101 +96,55 @@ exports.getBooksByIdAuthorRepository = async (IdAutor) => {
     }
 }
 
-//Actualizar los datos de un libro por su ID - SQL
-exports.putBookByIdRepository = async (IdLibro, libroActualizado) => {
+//Modifico items de manera opcional de un libro mediante su ID - SQL
+exports.putBookItemsByIdRepository = async (IdLibro, libroActualizado) => {
     const { Titulo, IdAutor, FechaPublicacion, Genero, Disponibilidad } = libroActualizado;
     const pool = await getSQLConnection();
 
     try {
-
-        let resultado = await pool.request().
-            input('IdLibro', sql.Int, IdLibro)
-
+        let query = 'UPDATE Biblioteca.dbo.Libro SET ';
+        const request = await pool.request().input('IdLibro', sql.Int, IdLibro)
         if (Titulo != null) {
-            resultado.input('Titulo', sql.NVarChar, Titulo)
+            request.input('Titulo', sql.NVarChar, Titulo)
+            query += 'Titulo = @Titulo, '
         }
         if (IdAutor != null) {
-            resultado.input('IdAutor', sql.Int, IdAutor)
+            request.input('IdAutor', sql.Int, IdAutor)
+            query += 'IdAutor = @IdAutor, '
         }
         if (FechaPublicacion != null) {
-            resultado.input('FechaPublicacion', sql.Date, FechaPublicacion)
+            request.input('FechaPublicacion', sql.Date, FechaPublicacion)
+            query += 'FechaPublicacion = @FechaPublicacion, '
         }
         if (Genero != null) {
-            resultado.input('Genero', sql.NVarChar, Genero)
+            request.input('Genero', sql.NVarChar, Genero)
+            query += 'Genero = @Genero, '
         }
         if (Disponibilidad != null) {
-            resultado.input('Disponibilidad', sql.Int, Disponibilidad)
+            request.input('Disponibilidad', sql.Bit, Disponibilidad)
+            query += 'Disponibilidad = @Disponibilidad'
+        }
+        if (query.trim() === 'UPDATE Biblioteca.dbo.Libro SET') {
+            throw new Error("No se recibió ningún campo para actualizar");
         }
 
-        resultado = await resultado.query(queries.updateBook)
+        query = query.trim().replace(/,$/, '')
+        
+        query += ' OUTPUT INSERTED.* WHERE IdLibro = @IdLibro'
+        
+        const libroActualizado = await request.query(query)
 
-        console.table(resultado.recordset)
-        return resultado.recordset
-    } catch (error) {
-        console.log("Error en putBookRepository - Repository " + error)
-        throw Error("Error en putBookRepository - Repository " + error)
-    } finally {
+        if (libroActualizado.rowsAffected[0] == 0) {
+            return null
+        }
+        return libroActualizado.recordset
+    }catch (error) {
+        console.log("Error en putBookItemsByIdRepository - Repository " + error)
+        throw Error("Error en putBookItemsByIdRepository - Repository " + error)
+    }
+    finally {
         pool.close()
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* exports.putBookAvailabilityRepository = async (IdLibro, libroActualizado) => {
-    const { Disponibilidad } = libroActualizado;
-    const pool = await getSQLConnection();
-
-    try {
-
-        await pool.request().query('USE Biblioteca')
-
-        let queryActualizada = 'UPDATE Libro SET ';
-        const resultado = pool.request().input('IdLibro', sql.Int, IdLibro)
-
-        if (Disponibilidad != null) {
-            resultado.input('Disponibilidad', sql.Bit, Disponibilidad)
-            queryActualizada += 'Disponibilidad = @Disponibilidad'
-        }
-       
-        queryActualizada = queryActualizada.trim().replace(/,$/, '')        
-        queryActualizada += ' WHERE IdLibro = @IdLibro'        
-
-        const libroActualizado = await resultado.query(queryActualizada)
-
-        if (libroActualizado.rowsAffected[0] == 0) {
-            return []
-        }
-        return { Disponibilidad }
-    } catch (error) {
-        console.log("Error en putBookAvailability - Repository " + error)
-        throw Error("Error en putBookAvailability - Repository " + error)
-    }
-    finally{
-        pool.close()
-    }
-} */
 
 
