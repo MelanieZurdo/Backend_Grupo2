@@ -2,7 +2,7 @@ const { getSQLConnection } = require('../database/conexion')
 const queries = require('../database/librosQueries')
 const sql = require('mssql');
 
-//Obtengo todos los libros SQL
+//Obtengo todos los libros - SQL
 exports.getAllBooksRepository = async () => {
     const pool = await getSQLConnection()
     try {
@@ -19,7 +19,7 @@ exports.getAllBooksRepository = async () => {
     }
 }
 
-//Creo un nuevo libro SQL
+//Creo un nuevo libro - SQL
 exports.postNewBookRepository = async (libroNuevo) => {
     const { Titulo, IdAutor, FechaPublicacion, Genero, Disponibilidad } = libroNuevo
     const pool = await getSQLConnection()
@@ -45,7 +45,7 @@ exports.postNewBookRepository = async (libroNuevo) => {
     }
 }
 
-//Modifico disponibilidad del libro mediante su ID SQL
+//Modifico disponibilidad del libro mediante su ID - SQL
 exports.putBookAvailabilityRepository = async (IdLibro, libroActualizado) => {
     const { Disponibilidad } = libroActualizado;
     const pool = await getSQLConnection();
@@ -60,9 +60,6 @@ exports.putBookAvailabilityRepository = async (IdLibro, libroActualizado) => {
             .input('IdLibro', sql.Int, IdLibro)
             .input('Disponibilidad', sql.Bit, Disponibilidad)
             .query(queries.putBookAvailability);
-
-        //const resultado = await request.query(queries.putBookAvailability);
-
 
         if (resultado.rowsAffected[0] === 0) {
             console.log("No se ha podido modificar la disponibilidad del libro");
@@ -80,7 +77,7 @@ exports.putBookAvailabilityRepository = async (IdLibro, libroActualizado) => {
     }
 }
 
-//Obtener todos los libros de un autor por (IdAutor) y la informacion del mismo.
+//Obtener todos los libros de un autor por (IdAutor) y la informacion del mismo - SQL
 exports.getBooksByIdAuthorRepository = async (IdAutor) => {
     const pool = await getSQLConnection();
     try {
@@ -107,22 +104,22 @@ exports.putBookByIdRepository = async (IdLibro, libroActualizado) => {
     try {
 
         let resultado = await pool.request().
-        input('IdLibro', sql.Int, IdLibro)
+            input('IdLibro', sql.Int, IdLibro)
 
         if (Titulo != null) {
-            resultado.input('Titulo', sql.NVarChar, Titulo)            
+            resultado.input('Titulo', sql.NVarChar, Titulo)
         }
         if (IdAutor != null) {
-            resultado.input('IdAutor', sql.Int, IdAutor)            
+            resultado.input('IdAutor', sql.Int, IdAutor)
         }
         if (FechaPublicacion != null) {
-            resultado.input('FechaPublicacion', sql.Date, FechaPublicacion)            
+            resultado.input('FechaPublicacion', sql.Date, FechaPublicacion)
         }
         if (Genero != null) {
-            resultado.input('Genero', sql.NVarChar, Genero)            
+            resultado.input('Genero', sql.NVarChar, Genero)
         }
         if (Disponibilidad != null) {
-            resultado.input('Disponibilidad', sql.Int, Disponibilidad)            
+            resultado.input('Disponibilidad', sql.Int, Disponibilidad)
         }
 
         resultado = await resultado.query(queries.updateBook)

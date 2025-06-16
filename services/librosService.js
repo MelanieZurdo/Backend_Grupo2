@@ -1,6 +1,6 @@
 const librosRepository = require('../repositories/librosSQLRepository')
 
-//Obtengo todos los libros SQL
+//Obtengo todos los libros - SQL
 exports.getAllBooks = async () => {
     try {
         return await librosRepository.getAllBooksRepository()
@@ -11,7 +11,7 @@ exports.getAllBooks = async () => {
     }
 }
 
-//Creo un nuevo libro SQL
+//Creo un nuevo libro - SQL
 exports.postNewBook = async (libroNuevo) => {
     try {
         return await librosRepository.postNewBookRepository(libroNuevo)
@@ -22,7 +22,7 @@ exports.postNewBook = async (libroNuevo) => {
     }
 }
 
-//Modifico disponibilidad del libro mediante su ID SQL
+//Modifico disponibilidad del libro mediante su ID - SQL
 exports.putBookAvailability = async (IdLibro, libroActualizado) => {
     try {
         return await librosRepository.putBookAvailabilityRepository(IdLibro, libroActualizado)
@@ -32,11 +32,11 @@ exports.putBookAvailability = async (IdLibro, libroActualizado) => {
     }
 }
 
-//Obtener todos los libros de un autor por (IdAutor) y la informacion del mismo.
+//Obtener todos los libros de un autor por (IdAutor) y la informacion del mismo - SQL
 exports.getBooksByIdAuthor = async (IdAutor) => {
-    try {   
-            return await librosRepository.getBooksByIdAuthorRepository(IdAutor)
-        }
+    try {
+        return await librosRepository.getBooksByIdAuthorRepository(IdAutor)
+    }
     catch (error) {
         console.log("Error en getBooksByIdAuthor - Repository " + error)
         throw Error("Error en getBooksByIdAuthor - Repository " + error)
@@ -45,7 +45,7 @@ exports.getBooksByIdAuthor = async (IdAutor) => {
 
 //Actualizar los datos de un libro por su ID - SQL
 exports.putBookById = async (IdLibro, libroActualizado) => {
-        try {
+    try {
         return await librosRepository.putBookByIdRepository(IdLibro, libroActualizado)
     } catch (error) {
         console.log("Error en putBookById - Service " + error)

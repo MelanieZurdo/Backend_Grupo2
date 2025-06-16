@@ -17,6 +17,8 @@ app.listen(PORT, HOSTNAME, () => {
     console.log(`El servidor esta corriendo en: http://${HOSTNAME}:${PORT}`)
 })
 
-app.get('/', (req, res) => {
-    res.send("Servidor funcionando")
- })
+app.get('/{*any}', (req, res) => {
+    res.setHeader('Content-Type', 'text/plain')
+    res.status(404)
+    res.send("La ruta a la cual quiero ingresar no existe")
+})

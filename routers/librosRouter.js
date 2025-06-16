@@ -6,16 +6,16 @@ const librosController = require('../controllers/librosController')
 //Middleware de Express
 librosRouter.use(express.json())
 
-//Obtengo todos los libros SQL
+//Obtengo todos los libros - SQL
 librosRouter.get('/', librosController.readAllBooks)
 
-//Creo un nuevo libro SQL
+//Creo un nuevo libro - SQL
 librosRouter.post('/', librosController.createNewBook)
 
-//Modifico disponibilidad del libro mediante su ID SQL
+//Modifico disponibilidad del libro mediante su ID - SQL
 librosRouter.put('/disponibilidad/:IdLibro', librosController.updateBookAvailability)
 
-//Obtener todos los libros de un autor por (IdAutor) y la informacion del mismo.
+//Obtener todos los libros de un autor por (IdAutor) y la informacion del mismo - SQL
 librosRouter.get('/autor/:IdAutor', librosController.readBooksByIdAuthor)
 
 //Actualizar los datos de un libro por su ID - SQL

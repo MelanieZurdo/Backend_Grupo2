@@ -1,6 +1,6 @@
 const librosService = require('../services/librosService')
 
-//Obtengo todos los libros SQL
+//Obtengo todos los libros - SQL
 exports.readAllBooks = async (req, res) => {
     try {
         res.setHeader('Content-Type', 'application/json')
@@ -15,7 +15,7 @@ exports.readAllBooks = async (req, res) => {
     }
 }
 
-//Creo un nuevo libro SQL
+//Creo un nuevo libro - SQL
 exports.createNewBook = async (req, res) => {
     try {
         let libroNuevo = req.body
@@ -32,7 +32,7 @@ exports.createNewBook = async (req, res) => {
     }
 }
 
-//Modifico disponibilidad del libro mediante su ID SQL
+//Modifico disponibilidad del libro mediante su ID - SQL
 
 exports.updateBookAvailability = async (req, res) => {
     try {
@@ -59,10 +59,10 @@ exports.updateBookAvailability = async (req, res) => {
     }
 }
 
-//Obtener todos los libros de un autor por (IdAutor) y la informacion del mismo.
-exports.readBooksByIdAuthor = async (req,res) => {
+//Obtener todos los libros de un autor por (IdAutor) y la informacion del mismo - SQL
+exports.readBooksByIdAuthor = async (req, res) => {
     try {
-        const IdAutor = req.params.IdAutor;        
+        const IdAutor = req.params.IdAutor;
 
         const booksByAuthor = await librosService.getBooksByIdAuthor(IdAutor)
 
@@ -85,7 +85,7 @@ exports.readBooksByIdAuthor = async (req,res) => {
 }
 
 //Actualizar los datos de un libro por su ID - SQL
-exports.updateBookById = async (req,res) => {
+exports.updateBookById = async (req, res) => {
     try {
         const IdLibro = req.params.IdLibro;
         const libroActualizado = req.body;

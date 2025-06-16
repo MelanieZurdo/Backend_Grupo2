@@ -1,7 +1,7 @@
-### Obtengo todos los libros SQL (OK)
+### Obtengo todos los libros - SQL
 GET http://127.0.0.1:3000/api/libros HTTP/1.1
 
-### Creo un nuevo libro SQL (OK)
+### Creo un nuevo libro - SQL
 POST http://127.0.0.1:3000/api/libros HTTP/1.1
 Content-Type: application/json
 
@@ -13,7 +13,7 @@ Content-Type: application/json
   "Disponibilidad": 1
 }
 
-### Modifico disponibilidad del libro mediante su ID SQL (OK)
+### Modifico disponibilidad del libro mediante su ID - SQL
 PUT http://127.0.0.1:3000/api/libros/disponibilidad/3 HTTP/1.1
 Content-Type: application/json
 
@@ -21,10 +21,10 @@ Content-Type: application/json
   "Disponibilidad": 1
 }
 
-### Obtener todos los libros de un autor por (IdAutor) y la informacion del mismo. (OK)
+### Obtener todos los libros de un autor por (IdAutor) y la informacion del mismo - SQL
 GET http://127.0.0.1:3000/api/libros/autor/2 HTTP/1.1
 
-### Modifico un libro mediante su ID
+### Modifico un libro mediante su ID - SQL
 PUT http://127.0.0.1:3000/api/libros/30 HTTP/1.1
 Content-Type: application/json
 
