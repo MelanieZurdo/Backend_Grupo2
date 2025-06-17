@@ -1,4 +1,4 @@
-const autorRepository = require('../repositories/AutorRepository');
+const autorRepository = require('../repositories/autorRepository');
 
 exports.autorGetAllService = async () => {
     try {
@@ -15,7 +15,15 @@ exports.autorCreateService = async (autorNuevo) => {
     try {
         return await autorRepository.createAutorRepository(autorNuevo);
     } catch (error) {
-        console.log('error obteniendo Create autorRepository' + error);
+        console.log('error usando autorCreateService' + error);
         throw error;
+    }
+}
+
+exports.autorDeleteService = async (idAutor) => {
+    try {
+        return await autorRepository.deleteAutorRepository(idAutor);
+    } catch (error) {
+        console.log('Error usando autorDeleteService' + error);
     }
 }

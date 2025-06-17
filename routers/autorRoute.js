@@ -7,5 +7,6 @@ const autorController = require('../controllers/autorController')
 
 autorRoute.get('/' , autorController.readAutor)
 autorRoute.post('/' , autorController.createAutor)
+autorRoute.delete('/:id', autorController.deleteAutor)
 
 module.exports = autorRoute;

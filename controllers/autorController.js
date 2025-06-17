@@ -36,3 +36,22 @@ exports.createAutor = async (req, res) => {
         res.status(500).send({code:500 , message:"Error al crear autor nuevo"});
     }
 }
+
+exports.deleteAutor = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const autor = await autorService.autorDeleteService(id);
+
+        if (autor.length === 0) {
+            return res.status(404).send("no se encuentra un autor con el id: " + id)
+        }
+
+        res.setHeader('Content-Type', 'application/json')
+        res.status(200)
+        res.send(autor)
+    } catch (error) {
+        console.log("Error en deleteAutor - " + error)
+        res.status(500).send({ code: 500, message: "Error al eliminar un autor" })
+    }
+
+}

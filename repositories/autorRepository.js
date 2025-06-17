@@ -41,4 +41,29 @@ exports.createAutorRepository = async (autorNuevo) => {
     }
 }
 
+exports.deleteAutorRepository = async (idAutor) => {
+    const pool = await getSQLConnection();
+
+    try {
+        const autorEncontrado = await pool.request()
+        .input('idAutor',sql.Int, idAutor)
+        .query(queries.getAutorById);
+        if (autorEncontrado.recordset === 0) {
+            console.log('autor no encontrado');
+        } else {
+            await pool.request()
+            .input('idAutor',sql.Int, idAutor)
+            .query(queries.deleteAutorById);
+
+            return autorEncontrado.recordset[0];
+        
+        }
+    } catch (error) {
+        console.log('DeleteAutorRepository error')
+        throw Error('No se pudo eliminar autor' + error);
+    } finally {
+        pool.close();
+    }
+}
+
 
