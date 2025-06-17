@@ -1,55 +1,92 @@
-const queries = require('../database/queriesUsuarios')
 const { getConnection } = require('../database/conexion')
 const sql = require('mssql');
+const queriesUsuarios = require('../database/queriesUsuarios');
 
 /**
- * Traer todos los usuarios
+ * TRAER TODOS LOS USUARIOS DE LA BBDD
  */
 exports.getAllUsuariosRepository = async () => {
     const pool = await getConnection()
     
     try{
-        const resultado = await pool.request().query(queries.getUsuarios)
-        console.table(resultado.recordset)
 
-        return resultado.recordset
+        const usuarios = await pool.request().query(queriesUsuarios.getUsuarios)
+
+        return usuarios.recordset
+
     } catch (error) {
-        console.log("Error en getAllUsuarios - " + error)
-        throw Error("Error en getAllUsuarios - " + error) 
+
+        console.log("ERROR al intentar traer todos los usuarios - getAllUsuariosRepository " + error)
+        throw Error("ERROR " + error)
+
     } finally {
+
         pool.close()
+
     }
 
 }
 
 /**
- * Traer un usuario pasando su ID
+ * TRAER UN USUARIO DE LA BBDD, SEGUN SU ID
  */
-exports.getUsuarioByIdRepository = async (id) => {//buscar por ID
+exports.getUsuarioByIdRepository = async (id) => {
     const pool = await getConnection();
 
     try {
-        console.log(`REPOSITORY  - getUsuarioById - id:${id}`)
-        const usuarioEncontrado = await pool.request().input('id', sql.Int, id).query(queries.getUsuarioById)
+        const usuarioEncontrado = await pool.request().input('id', sql.Int, id).query(queriesUsuarios.getUsuarioById)
 
         if(usuarioEncontrado.recordset.length == 0){
             console.log("Usuario no encontrado");
         }else{
             console.log("Usuario encontrado");
-            console.table(usuarioEncontrado.recordset)
-            
+
             return usuarioEncontrado.recordset
         }
 
     } catch (error) {
-        console.log("getUsuarioById  " + error)
-        throw Error("Error al intentar encontrar usuario: - " + error)
+        console.log("ERROR al intentar encontrar usuario - getUsuarioById  " + error)
+        throw Error("ERROR getUsuarioById  " + error)
     } finally {
         pool.close()
     }
 }
 
+/**
+ * TRAER UN USUARIO DE LA BBDD, POR NOMBRE O PARTE DEL NOMBRE
+ */
+exports.getUsuarioByNameRepository = async (NombreUsuario) => {
+
+    const pool = await getConnection();
+
+    try {
+
+        const usuarioEncontrado = await pool.request().input('NombreUsuario', sql.NVarChar, `%${NombreUsuario}%`).query(queriesUsuarios.getUsuarioByName)
+
+        if(usuarioEncontrado.recordset.length == 0){
+            console.log("Usuario no encontrado");
+        }else{
+            console.log("Usuario encontrado");
+            return usuarioEncontrado.recordset
+        }
+
+    } catch (error) {
+
+        console.log("ERROR al intentar encontrar usuario - getUsuarioByNameRepository " + error)
+        throw Error("Error getUsuarioByNameRepository" + error)
+
+    } finally {
+
+        pool.close()
+
+    }
+}
+
+/**
+ * CREAR UN NUEVO USUARIO EN LA BBDD
+ */
 exports.createUsuarioRepository = async (usuario) => {
+
     const { NombreUsuario, Correo, Direccion, FechaRegistro } = usuario;
     const pool = await getConnection();
 
@@ -60,23 +97,27 @@ exports.createUsuarioRepository = async (usuario) => {
         .input('Correo', sql.NVarChar, Correo)
         .input('Direccion', sql.NVarChar, Direccion)
         .input('FechaRegistro', sql.Date, FechaRegistro)
-        .query(queries.addUsuario)
-
-        const nuevousuario = { NombreUsuario, Correo, Direccion, FechaRegistro   }
-        console.table(nuevousuario)
+        .query(queriesUsuarios.addUsuario)
 
         return usuarioNuevo.recordset
+
     } catch (error) {
-        console.log("createNewFrontendLanguageRepository - " + error)
-        throw Error("Error al intentar crear el nuevo lenguaje: - " + error)
+
+        console.log("ERROR al intentar crear un nuevo usuario - createNewFrontendLanguageRepository " + error)
+        throw Error("ERROR createNewFrontendLanguageRepository " + error)
+
     } finally {
+
         pool.close()
     }
 }
 
-exports.updateUsuarioRepository = async (id, usuarioEditado) => {
+/**
+ * ACTUALIZAR UN USUARIO EN LA BBDD, SELECCIONADO POR SU ID
+ */
+exports.updateUsuarioRepository = async (id, usuario) => {
 
-    const { NombreUsuario, Correo, Direccion, FechaRegistro } = usuarioEditado;
+    const { NombreUsuario, Correo, Direccion, FechaRegistro } = usuario;
     const pool = await getConnection();
 
     try {
@@ -85,6 +126,7 @@ exports.updateUsuarioRepository = async (id, usuarioEditado) => {
 
         let queryActualizada = 'UPDATE Usuario SET ';
         const requestActualizado = pool.request().input('id', sql.Int, id)
+
         if (NombreUsuario != null) {
             requestActualizado.input('NombreUsuario', sql.NVarChar, NombreUsuario)
             queryActualizada += 'NombreUsuario = @NombreUsuario, '
@@ -102,11 +144,9 @@ exports.updateUsuarioRepository = async (id, usuarioEditado) => {
             queryActualizada += 'FechaRegistro = @FechaRegistro, '
         }
 
-        //console.log(queryActualizada)
         queryActualizada = queryActualizada.trim().replace(/,$/, '')
-        //console.log(queryActualizada)
+
         queryActualizada += ' WHERE IdUsuario = @id'
-        //console.log(queryActualizada)
 
         const usuarioActualizado = await requestActualizado.query(queryActualizada)
 
@@ -115,11 +155,16 @@ exports.updateUsuarioRepository = async (id, usuarioEditado) => {
         }
 
         return { NombreUsuario, Correo, Direccion, FechaRegistro }
+
     } catch (error) {
-        console.log("updateFrontendLanguageItemRepository - " + error)
-        throw Error("Error al intentar actualizar el lenguaje: - " + error)
+
+        console.log("ERROR al intentar actualizar el lenguaje - updateUsuarioRepository " + error)
+        throw Error("ERROR updateUsuarioRepository " + error)
+
     } finally {
+
         pool.close()
+
     }
 }
 
