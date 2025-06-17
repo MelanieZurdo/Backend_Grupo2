@@ -1,5 +1,4 @@
 const express = require('express');
-
 const autorRoute = express.Router();
 
 autorRoute.use(express.json());

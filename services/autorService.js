@@ -11,11 +11,9 @@ exports.autorGetAllService = async () => {
     }
 }
 
-exports.autorCreateService = async (autor) => {
+exports.autorCreateService = async (autorNuevo) => {
     try {
-
-        
-        return await autorRepository.createAutorRepository(autor);
+        return await autorRepository.createAutorRepository(autorNuevo);
     } catch (error) {
         console.log('error obteniendo Create autorRepository' + error);
         throw error;

@@ -3,7 +3,7 @@ const app = express()
 const HOSTNAME = '127.0.0.1'
 const PORT = 3000
 const autorRoute = require('./routers/autorRoute')
-
+app.use(express.json());
 
 app.use('/api/autor', autorRoute);
 

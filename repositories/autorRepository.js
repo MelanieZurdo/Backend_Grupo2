@@ -18,8 +18,8 @@ exports.getAllAutorRepository = async () => {
 }
 
 
-exports.createAutorRepository = async (autor) => {
-    const {NombreAutor, Nacionalidad, FechaNacimiento} = autor;
+exports.createAutorRepository = async (autorNuevo) => {
+    const {NombreAutor, Nacionalidad, FechaNacimiento} = autorNuevo;
     const pool = await getSQLConnection();
     
     try {
@@ -28,7 +28,6 @@ exports.createAutorRepository = async (autor) => {
         .input('Nacionalidad', sql.NVarChar, Nacionalidad)
         .input('FechaNacimiento', sql.Date, FechaNacimiento)
         .query(queries.addAutor);
-
 
 
         return resultado.recordset;

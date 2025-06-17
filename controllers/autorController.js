@@ -14,10 +14,22 @@ exports.readAutor = async (req,res) =>{
 }
 
 exports.createAutor = async (req, res) => {
+
+    
+    
     try {
-        console.log('Request body:', req.body);
-        let autor = req.body;
-        res.send(await autorService.autorCreateService(autor))
+        if (!req.body || Object.keys(req.body).length === 0) {
+            return res.status(400).send({ code: 400, message: "El cuerpo de la solicitud está vacío" });
+        }
+
+        let autorNuevo = req.body;
+        const autorAgregado = await autorService.autorCreateService(autorNuevo);
+
+        res.setHeader('Content-Type', 'application/json');
+        res.status(200).send(autorAgregado);
+        
+        
+        //res.send(await autorService.autorCreateService(autor))
         
     } catch (error) {
         console.log('error creando autor' + error)
