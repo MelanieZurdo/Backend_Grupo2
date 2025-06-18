@@ -27,3 +27,13 @@ exports.autorDeleteService = async (idAutor) => {
         console.log('Error usando autorDeleteService' + error);
     }
 }
+
+exports.autorUpdateService = async (idAutor, autorActualizado) =>{
+    try {
+        return await autorRepository.updateAutorRepository(idAutor, autorActualizado)
+    } catch (error) {
+
+        console.log("Error en autorUpdateService  - " + error)
+        throw Error("Error en el service: " + error)
+    }
+}
