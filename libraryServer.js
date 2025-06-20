@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 app.use(express.static('src'));
 const dotenv = require('dotenv')
+const routerUsuario = require('./routers/usuarioRouter.js');
 const librosRouter = require('./routers/librosRouter');
 const prestamoRoutes = require('./routers/prestamoRoutes.js');
 const fs = require('node:fs')
@@ -14,6 +15,7 @@ const PORT = process.env.PORT_EXPRESS
 
 //For the following path, use the following router
 app.use(express.json());
+app.use('/usuario', routerUsuario);
 app.use('/api/libros', librosRouter)
 app.use('/prestamos', prestamoRoutes);
 
