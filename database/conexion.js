@@ -1,10 +1,13 @@
 const sql = require('mssql');
 const configDB = require('./config').configDB
 
-exports.getConnection = async () => {
+exports.getSQLConnection = async () => {
     try {
-        return await sql.connect(configDB)
+        const pool = await sql.connect(configDB);
+        //const resultado = await pool.request().query('Select TOP 3 * from Libro');
+        //console.log(resultado)
+        return pool
     } catch (error) {
-        console.log("Error al conectarse a la base de datos: " + error)
+        console.log("Error en getConnection: " + error)
     }
 }
