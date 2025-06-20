@@ -1,7 +1,7 @@
 const { getConnection } = require("./conexion");
 const sql = require("mssql");
 
-const withTransaction = async (callback) => {
+exports.withTransaction = async (callback) => {
     const pool = await getConnection();
     const transaction = new sql.Transaction(pool);
     try {
@@ -12,9 +12,7 @@ const withTransaction = async (callback) => {
     } catch (error) {
         await transaction.rollback();
         throw error;
+    } finally {
+        pool.close();
     }
-};
-
-module.exports = {
-    withTransaction,
 };

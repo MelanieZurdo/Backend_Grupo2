@@ -1,23 +1,11 @@
 const sql = require('mssql');
 const { getConnection } = require('../database/conexion.js');
+const queries = require('../database/prestamoQueries.js');
 
-const QUERY_FIND_BY_FILTERS = 'SELECT * FROM Prestamo WHERE 1=1';
-const QUERY_FIND_BY_ID = 'SELECT * FROM Prestamo WHERE IdPrestamo = @IdPrestamo';
-const QUERY_DELETE = 'DELETE FROM Prestamo WHERE IdPrestamo = @IdPrestamo';
-const QUERY_INSERT = `
-    INSERT INTO Prestamo (IdUsuario, IdLibro, FechaPrestamo)
-    OUTPUT INSERTED.*
-    VALUES (@IdUsuario, @IdLibro, GETDATE())
-`;
-const QUERY_UPDATE = `
-    UPDATE Prestamo
-    SET Activo = @Activo, FechaDevolucion = GETDATE()
-    OUTPUT INSERTED.*
-    WHERE IdPrestamo = @IdPrestamo
-`;
 
-const findByFilters = async (filters) => {
-    let query = QUERY_FIND_BY_FILTERS;
+exports.getPrestamos = async (filters) => {
+    const pool = await getConnection();
+    let query = queries.getPrestamos;
     const params = {};
 
     if (filters.idUsuario) {
@@ -33,55 +21,58 @@ const findByFilters = async (filters) => {
         params.Activo = filters.activo;
     }
 
+    try {
+        let request = pool.request();
+        Object.entries(params).forEach(([key, value]) => {
+            request = request.input(key, value);
+        });
+
+        const result = await request.query(query);
+        return result.recordset;
+    } catch (error) {
+        throw Error(`Error al buscar préstamos: ${error.message}`);
+    } finally {
+        pool.close()
+    }
+};
+
+exports.getPrestamoById = async (idPrestamo) => {
     const pool = await getConnection();
-    let request = pool.request();
-    Object.entries(params).forEach(([key, value]) => {
-        request = request.input(key, value);
-    });
-
-    const result = await request.query(query);
-    return result.recordset;
+    try {
+        const result = await pool
+            .request()
+            .input('IdPrestamo', idPrestamo)
+            .query(queries.getPrestamoById);
+        return result.recordset[0];
+    } catch (error) {
+        throw Error(`Error al buscar préstamo por ID: ${error.message}`);
+    } finally {
+        pool.close();
+    }
 };
 
-const findById = async (idPrestamo) => {
-    const pool = await getConnection();
-    const result = await pool
-        .request()
-        .input('IdPrestamo', idPrestamo)
-        .query(QUERY_FIND_BY_ID);
-    return result.recordset[0];
+exports.savePrestamo = async ({ idUsuario, idLibro }, transaction) => {
+    try {
+        const request = new sql.Request(transaction);
+        const insertResult = await request
+            .input('IdUsuario', idUsuario)
+            .input('IdLibro', idLibro)
+            .query(queries.savePrestamo);
+        return insertResult.recordset[0];
+    } catch (error) {
+        throw Error(`Error al guardar préstamo: ${error.message}`);
+    }
 };
 
-const save = async ({ idUsuario, idLibro }, transaction) => {
-    const request = new sql.Request(transaction);
-    const insertResult = await request
-        .input('IdUsuario', idUsuario)
-        .input('IdLibro', idLibro)
-        .query(QUERY_INSERT);
-    return insertResult.recordset[0];
-};
-
-const update = async (idPrestamo, activo, transaction) => {
-    const request = new sql.Request(transaction);
-    const result = await request
-        .input('IdPrestamo', idPrestamo)
-        .input('Activo', activo)
-        .query(QUERY_UPDATE);
-    return result.recordset[0];
-};
-
-const deleteById = async (idPrestamo) => {
-    const pool = await getConnection();
-    await pool
-        .request()
-        .input('IdPrestamo', idPrestamo)
-        .query(QUERY_DELETE);
-};
-
-module.exports = {
-    findByFilters,
-    findById,
-    save,
-    update,
-    deleteById,
+exports.updatePrestamo = async (idPrestamo, activo, transaction) => {
+    try {
+        const request = new sql.Request(transaction);
+        const result = await request
+            .input('IdPrestamo', idPrestamo)
+            .input('Activo', activo)
+            .query(queries.updatePrestamo);
+        return result.recordset[0];
+    } catch (error) {
+        throw Error(`Error al actualizar préstamo: ${error.message}`);
+    }
 };

@@ -1,71 +1,61 @@
 const prestamoRepository = require('../repositories/prestamoRepository.js');
-const usuarioRepository = require('../repositories/usuarioRepository.js');
-const libroRepository = require('../repositories/libroRepository.js');
+const usuarioRepository = require('../repositories/usuario.js');
+const libroRepository = require('../repositories/libro.js');
 const { withTransaction } = require('../database/transaccion.js');
-const { NotFoundError, ConflictError } = require('../utils/errores.js');
 
 // TODO: Corregir fechas que No sale la hora
 
-const getPrestamos = async (filters = {}) => {
-    const prestamos = await prestamoRepository.findByFilters(filters);
-    if (!prestamos || prestamos.length === 0) {
-        throw new NotFoundError('No se encontraron préstamos');
+exports.getPrestamos = async (filters = {}) => {
+    try {
+        const prestamos = await prestamoRepository.getPrestamos(filters);
+        if (!prestamos || prestamos.length === 0) {
+            throw new Error("Not Found: Prestamos no encontrados");
+        }
+        return prestamos;
+    } catch (error) {
+        throw error;
     }
-
-    return prestamos;
 };
 
-const createPrestamo = async ({ idUsuario, idLibro }) => {
-    const usuario = await usuarioRepository.findById(idUsuario);
-    if (!usuario) {
-        throw new NotFoundError('Usuario no encontrado');
-    }
+exports.createPrestamo = async ({ idUsuario, idLibro }) => {
+    try {
+        const usuario = await usuarioRepository.findById(idUsuario);
+        if (!usuario) {
+            throw new Error('Not Found: Usuario no encontrado');
+        }
 
-    const libro = await libroRepository.findById(idLibro);
-    if (!libro) {
-        throw new NotFoundError('Libro no encontrado');
-    }
-    if (!libro.Disponibilidad) {
-        throw new ConflictError('El libro ya está prestado');
-    }
+        const libro = await libroRepository.findById(idLibro);
+        if (!libro) {
+            throw new Error('Not Found: Libro no encontrado');
+        }
+        if (!libro.Disponibilidad) {
+            throw new Error('Conflicto: El libro ya está prestado');
+        }
 
-    return await withTransaction(async (transaction) => {
-        await libroRepository.updateDisponibilidad(idLibro, false, transaction);
-        return await prestamoRepository.save({idUsuario, idLibro}, transaction);
-    });
+        return await withTransaction(async (transaction) => {
+            await libroRepository.updateDisponibilidad(idLibro, false, transaction);
+            return await prestamoRepository.savePrestamo({idUsuario, idLibro}, transaction);
+        });
+    } catch (error) {
+        throw error;
+    }
 };
 
-const updateEstadoPrestamo = async (idPrestamo, activo) => {
-    const prestamo = await prestamoRepository.findById(idPrestamo);
-    if (!prestamo) {
-        throw new NotFoundError('Préstamo no encontrado');
-    }
-    if (!prestamo.Activo) {
-        throw new ConflictError('Solo se puede actualizar el estado de préstamos activos');
-    }
+exports.updateEstadoPrestamo = async (idPrestamo, activo) => {
+    try {
+        const prestamo = await prestamoRepository.getPrestamoById(idPrestamo);
+        if (!prestamo) {
+            throw new Error('Not Found: Prestamo no encontrado');
+        }
+        if (!prestamo.Activo) {
+            throw new Error('Conflicto: Solo se puede actualizar el estado de préstamos activos');
+        }
 
-    return await withTransaction(async (transaction) => {
-        await libroRepository.updateDisponibilidad(prestamo.IdLibro, true, transaction);
-        return await prestamoRepository.update(idPrestamo, activo, transaction);
-    });
-};
-
-const deletePrestamo = async (idPrestamo) => {
-    const prestamo = await prestamoRepository.findById(idPrestamo);
-    if (!prestamo) {
-        throw new NotFoundError('No se encontró el préstamo a eliminar');
+        return await withTransaction(async (transaction) => {
+            await libroRepository.updateDisponibilidad(prestamo.IdLibro, true, transaction);
+            return await prestamoRepository.updatePrestamo(idPrestamo, activo, transaction);
+        });
+    } catch (error) {
+        throw error;
     }
-    if (prestamo.Activo) {
-        throw new ConflictError('Solo se pueden eliminar préstamos que estén finalizados');
-    }
-
-    await prestamoRepository.deleteById(idPrestamo);
-    return { message: 'Préstamo eliminado correctamente' };
-};
-
-module.exports = {
-    getPrestamos,
-    createPrestamo,
-    updateEstadoPrestamo,
-    deletePrestamo
 };

@@ -3,9 +3,8 @@ const controller = require('../controllers/prestamoController.js');
 
 const router = Router();
 
-router.get('/', controller.read);
-router.post('/', controller.create);
-router.patch('/:idPrestamo', controller.update);
-router.delete('/:idPrestamo', controller.remove);
+router.get('/', controller.readPreatamos);
+router.post('/', controller.createPrestamo);
+router.patch('/:idPrestamo', controller.updatePrestamo);
 
 module.exports = router;
