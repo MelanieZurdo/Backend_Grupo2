@@ -12,9 +12,5 @@ const configDB = {
         trustServerCertificate: true
     }
 }
-console.log('SERVER:', process.env.SERVER_NAME);
-console.log('USER:', process.env.USER_DB);
-console.log('PASSWORD:', process.env.PASSWORD_DB);
-console.log('DATABASE:', process.env.NAME_DB);
 
 module.exports = { configDB }

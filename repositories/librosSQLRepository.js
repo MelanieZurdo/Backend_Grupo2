@@ -1,10 +1,10 @@
-const { getSQLConnection } = require('../database/conexion')
+const { getConnection } = require('../database/conexion')
 const queries = require('../database/librosQueries')
 const sql = require('mssql');
 
 //Obtengo todos los libros - SQL
 exports.getAllBooksRepository = async () => {
-    const pool = await getSQLConnection()
+    const pool = await getConnection()
     try {
         const resultado = await pool.request().query(queries.getAllBooks)
         console.table(resultado.recordset)
@@ -22,7 +22,7 @@ exports.getAllBooksRepository = async () => {
 //Creo un nuevo libro - SQL
 exports.postNewBookRepository = async (libroNuevo) => {
     const { Titulo, IdAutor, FechaPublicacion, Genero, Disponibilidad } = libroNuevo
-    const pool = await getSQLConnection()
+    const pool = await getConnection()
 
     try {
         const resultado = await pool.request()
@@ -48,7 +48,7 @@ exports.postNewBookRepository = async (libroNuevo) => {
 //Modifico disponibilidad del libro mediante su ID - SQL
 exports.putBookAvailabilityRepository = async (IdLibro, libroActualizado) => {
     const { Disponibilidad } = libroActualizado;
-    const pool = await getSQLConnection();
+    const pool = await getConnection();
 
     try {
         if (Disponibilidad == null) {
@@ -79,13 +79,13 @@ exports.putBookAvailabilityRepository = async (IdLibro, libroActualizado) => {
 
 //Obtener todos los libros de un autor por (IdAutor) y la informacion del mismo - SQL
 exports.getBooksByIdAuthorRepository = async (IdAutor) => {
-    const pool = await getSQLConnection();
+    const pool = await getConnection();
     try {
         const resultado = await pool.request()
             .input('IdAutor', sql.Int, IdAutor)
             .query(queries.getBooksByIdAuthor);
         console.table(resultado.recordset)
-        return resultado.recordset
+        return resultado.recordset[0]
     }
     catch (error) {
         console.log("Error en getBooksByIdAuthor - Repository " + error)
@@ -99,7 +99,7 @@ exports.getBooksByIdAuthorRepository = async (IdAutor) => {
 //Modifico items de manera opcional de un libro mediante su ID - SQL
 exports.putBookItemsByIdRepository = async (IdLibro, libroActualizado) => {
     const { Titulo, IdAutor, FechaPublicacion, Genero, Disponibilidad } = libroActualizado;
-    const pool = await getSQLConnection();
+    const pool = await getConnection();
 
     try {
         let query = 'UPDATE Biblioteca.dbo.Libro SET ';
