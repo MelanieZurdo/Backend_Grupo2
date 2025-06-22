@@ -9,13 +9,16 @@ const prestamoRouter = require('./routers/prestamoRouter.js');
 app.use(express.json());
 dotenv.config();
 
+const HOSTNAME = process.env.HOST_EXPRESS
+const PORT = process.env.PORT_EXPRESS
+
 app.use('/api/libros', libroRouter);
 app.use('/api/autor', autorRouter);
 app.use('/api/usuario', usuarioRouter);
 app.use('/api/prestamos', prestamoRouter);
 
-app.listen(dotenv.PORT, dotenv.HOSTNAME, () => {
-    console.log(`El servidor esta corriendo en: http://${dotenv.HOSTNAME}:${dotenv.PORT}/api`)
+app.listen(PORT, HOSTNAME, () => {
+    console.log(`El servidor esta corriendo en: http://${HOSTNAME}:${PORT}/api`)
 })
 
 app.get('/{*any}', (req, res) => {
