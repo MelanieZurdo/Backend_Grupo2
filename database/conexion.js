@@ -14,5 +14,3 @@ exports.getSQLConnection = async () => {
         console.log("Error en getConnection: " + error)
     }
 }
-
-//getSQLConnection();

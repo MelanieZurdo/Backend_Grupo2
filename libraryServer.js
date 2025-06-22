@@ -4,6 +4,7 @@ const dotenv = require('dotenv')
 const librosRouter = require('./routers/librosRouter');
 const autorRoute = require('./routers/autorRoute');
 const routerUsuario = require('./routers/usuarioRouter.js');
+const prestamoRoutes = require('./routers/prestamoRoutes.js');
 
 app.use(express.json());
 dotenv.config();
@@ -14,6 +15,7 @@ const PORT = 3000;
 app.use('/api/libros', librosRouter);
 app.use('/api/autor', autorRoute);
 app.use('/api/usuario', routerUsuario);
+app.use('/api/prestamos', prestamoRoutes);
 
 app.listen(PORT, HOSTNAME, () => {
     console.log(`El servidor esta corriendo en: http://${HOSTNAME}:${PORT}/api`)
