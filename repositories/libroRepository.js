@@ -1,12 +1,13 @@
-const { getSQLConnection } = require('../database/conexion')
-const queries = require('../database/librosQueries')
 const sql = require('mssql');
+const { getSQLConnection } = require('../database/conexion')
+const libroQueries = require('../database/queries/libroQueries');
+
 
 //Obtengo todos los libros - SQL
 exports.getAllBooksRepository = async () => {
     const pool = await getSQLConnection()
     try {
-        const resultado = await pool.request().query(queries.getAllBooks)
+        const resultado = await pool.request().query(libroQueries.getAllBooks)
         console.table(resultado.recordset)
         return resultado.recordset
 
@@ -31,7 +32,7 @@ exports.postNewBookRepository = async (libroNuevo) => {
             .input('FechaPublicacion', sql.Date, FechaPublicacion)
             .input('Genero', sql.NVarChar, Genero)
             .input('Disponibilidad', sql.Bit, Disponibilidad)
-            .query(queries.postNewBook)
+            .query(libroQueries.postNewBook)
 
         console.log(resultado.recordset)
         return resultado.recordset
@@ -59,7 +60,7 @@ exports.putBookAvailabilityRepository = async (IdLibro, libroActualizado) => {
         const resultado = await pool.request()
             .input('IdLibro', sql.Int, IdLibro)
             .input('Disponibilidad', sql.Bit, Disponibilidad)
-            .query(queries.putBookAvailability);
+            .query(libroQueries.putBookAvailability);
 
         if (resultado.rowsAffected[0] === 0) {
             console.log("No se ha podido modificar la disponibilidad del libro");
@@ -83,7 +84,7 @@ exports.getBooksByIdAuthorRepository = async (IdAutor) => {
     try {
         const resultado = await pool.request()
             .input('IdAutor', sql.Int, IdAutor)
-            .query(queries.getBooksByIdAuthor);
+            .query(libroQueries.getBooksByIdAuthor);
         console.table(resultado.recordset)
         return resultado.recordset
     }

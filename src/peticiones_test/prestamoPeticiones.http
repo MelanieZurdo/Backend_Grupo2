@@ -1,32 +1,32 @@
-@baseUrl = http://127.0.0.1:3000/api
+@api = http://127.0.0.1:3000/api
 
 ### Obtener todos los préstamos (sin filtros)
-GET {{baseUrl}}/prestamos
+GET {{api}}/prestamos
 
 ###
 
 ### Obtener préstamos filtrando por idUsuario
-GET {{baseUrl}}/prestamos?idUsuario=1
+GET {{api}}/prestamos?idUsuario=1
 
 ###
 
 ### Obtener préstamos filtrando por idLibro
-GET {{baseUrl}}/prestamos?idLibro=2
+GET {{api}}/prestamos?idLibro=2
 
 ###
 
 ### Obtener préstamos filtrando por activo (true)
-GET {{baseUrl}}/prestamos?activo=true
+GET {{api}}/prestamos?activo=true
 
 ###
 
 ### Obtener préstamos filtrando por varios parámetros
-GET {{baseUrl}}/prestamos?idUsuario=1&idLibro=2&activo=false
+GET {{api}}/prestamos?idUsuario=1&idLibro=2&activo=false
 
 ###
 
 ### Crear un préstamo: caso exitoso
-POST {{baseUrl}}/prestamos
+POST {{api}}/prestamos
 Content-Type: application/json
 
 {
@@ -37,7 +37,7 @@ Content-Type: application/json
 ###
 
 ### Conflict: libro ya prestado (correr después de crear un préstamo)
-POST {{baseUrl}}/prestamos
+POST {{api}}/prestamos
 Content-Type: application/json
 
 {
@@ -48,7 +48,7 @@ Content-Type: application/json
 ###
 
 ### Not Found: no se encontró idLibro
-POST {{baseUrl}}/prestamos
+POST {{api}}/prestamos
 Content-Type: application/json
 
 {
@@ -59,7 +59,7 @@ Content-Type: application/json
 ###
 
 ### Not Found: no se encontró idUsuario
-POST {{baseUrl}}/prestamos
+POST {{api}}/prestamos
 Content-Type: application/json
 
 {
@@ -70,7 +70,7 @@ Content-Type: application/json
 ###
 
 ### Actualizar estado de préstamo: caso exitoso (colocar el ID de un préstamo existente)
-PATCH {{baseUrl}}/prestamos/1
+PATCH {{api}}/prestamos/1
 Content-Type: application/json
 
 {
@@ -80,7 +80,7 @@ Content-Type: application/json
 ###
 
 ### Conflict: préstamo no activo (colocar el ID de un préstamo activo = false)
-PATCH {{baseUrl}}/prestamos/1
+PATCH {{api}}/prestamos/1
 Content-Type: application/json
 
 {
@@ -90,7 +90,7 @@ Content-Type: application/json
 ###
 
 ### Not Found: idPrestamo no encontrado
-PATCH {{baseUrl}}/prestamos/1000
+PATCH {{api}}/prestamos/1000
 Content-Type: application/json
 
 {

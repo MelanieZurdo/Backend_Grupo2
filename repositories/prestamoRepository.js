@@ -1,11 +1,11 @@
 const sql = require('mssql');
-const { getConnection } = require('../database/conexion.js');
-const queries = require('../database/prestamoQueries.js');
+const { getSQLConnection } = require('../database/conexion')
+const prestamoQueries = require('../database/queries/prestamoQueries');
 
 
 exports.getPrestamos = async (filters) => {
-    const pool = await getConnection();
-    let query = queries.getPrestamos;
+    const pool = await getSQLConnection();
+    let query = prestamoQueries.getPrestamos;
     const params = {};
 
     if (filters.idUsuario) {
@@ -37,11 +37,11 @@ exports.getPrestamos = async (filters) => {
 };
 
 exports.getPrestamoById = async (idPrestamo) => {
-    const pool = await getConnection();
+    const pool = await getSQLConnection();
     try {
         const result = await pool.request()
             .input('IdPrestamo', sql.Int, idPrestamo)
-            .query(queries.getPrestamoById);
+            .query(prestamoQueries.getPrestamoById);
         return result.recordset[0];
     } catch (error) {
         throw Error(`Error al buscar préstamo por ID`);
@@ -51,14 +51,14 @@ exports.getPrestamoById = async (idPrestamo) => {
 };
 
 exports.savePrestamo = async ({ idUsuario, idLibro }) => {
-    const pool = await getConnection();
+    const pool = await getSQLConnection();
     const date = new Date();
     try {
         const result = await pool.request()
             .input('IdUsuario', sql.Int, idUsuario)
             .input('IdLibro', sql.Int, idLibro)
             .input('FechaPrestamo', sql.DateTime, date)
-            .query(queries.savePrestamo);
+            .query(prestamoQueries.savePrestamo);
         return result.recordset[0];
     } catch (error) {
         throw Error(`Error al guardar préstamo`);
@@ -66,14 +66,14 @@ exports.savePrestamo = async ({ idUsuario, idLibro }) => {
 };
 
 exports.updatePrestamo = async (idPrestamo, activo, transaction) => {
-    const pool = await getConnection();
+    const pool = await getSQLConnection();
     const date = new Date();
     try {
         const result = await pool.request()
             .input('IdPrestamo', sql.Int, idPrestamo)
             .input('Activo', sql.Bit, activo)
             .input('FechaDevolucion', sql.DateTime, date)
-            .query(queries.updatePrestamo);
+            .query(prestamoQueries.updatePrestamo);
         return result.recordset[0];
     } catch (error) {
         throw Error(`Error al actualizar préstamo`);

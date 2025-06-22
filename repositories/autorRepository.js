@@ -1,13 +1,12 @@
 const sql = require('mssql');
 const { getSQLConnection } = require('../database/conexion');
-const queries = require('../database/queriesAutor');
-const { request } = require('express');
+const autorQueries = require('../database/queries/autorQueries');
 
 exports.getAllAutorRepository = async () => {
     const pool = await getSQLConnection();
     try {
 
-        const result = await pool.request().query(queries.getAutor);
+        const result = await pool.request().query(autorQueries.getAutor);
         // console.log('funkaa');
         return result.recordset;
     } catch (error) {
@@ -28,7 +27,7 @@ exports.createAutorRepository = async (autorNuevo) => {
             .input('NombreAutor', sql.NVarChar, NombreAutor)
             .input('Nacionalidad', sql.NVarChar, Nacionalidad)
             .input('FechaNacimiento', sql.Date, FechaNacimiento)
-            .query(queries.addAutor);
+            .query(autorQueries.addAutor);
 
 
         return resultado.recordset;
@@ -48,13 +47,13 @@ exports.deleteAutorRepository = async (idAutor) => {
     try {
         const autorEncontrado = await pool.request()
             .input('idAutor', sql.Int, idAutor)
-            .query(queries.getAutorById);
+            .query(autorQueries.getAutorById);
         if (autorEncontrado.recordset === 0) {
             console.log('autor no encontrado');
         } else {
             await pool.request()
                 .input('idAutor', sql.Int, idAutor)
-                .query(queries.deleteAutorById);
+                .query(autorQueries.deleteAutorById);
 
             return autorEncontrado.recordset[0];
 

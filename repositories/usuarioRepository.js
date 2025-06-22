@@ -1,16 +1,16 @@
-const { getConnection } = require('../database/conexion')
 const sql = require('mssql');
-const queriesUsuarios = require('../database/queriesUsuarios');
+const { getSQLConnection } = require('../database/conexion')
+const usuarioQueries = require('../database/queries/usuarioQueries');
 
 /**
  * TRAER TODOS LOS USUARIOS DE LA BBDD
  */
 exports.getAllUsuariosRepository = async () => {
-    const pool = await getConnection()
+    const pool = await getSQLConnection()
     
     try{
 
-        const usuarios = await pool.request().query(queriesUsuarios.getUsuarios)
+        const usuarios = await pool.request().query(usuarioQueries.getUsuarios)
 
         return usuarios.recordset
 
@@ -31,10 +31,10 @@ exports.getAllUsuariosRepository = async () => {
  * TRAER UN USUARIO DE LA BBDD, SEGUN SU ID
  */
 exports.getUsuarioByIdRepository = async (id) => {
-    const pool = await getConnection();
+    const pool = await getSQLConnection();
 
     try {
-        const usuarioEncontrado = await pool.request().input('id', sql.Int, id).query(queriesUsuarios.getUsuarioById)
+        const usuarioEncontrado = await pool.request().input('id', sql.Int, id).query(usuarioQueries.getUsuarioById)
 
         if(usuarioEncontrado.recordset.length == 0){
             console.log("Usuario no encontrado");
@@ -57,11 +57,11 @@ exports.getUsuarioByIdRepository = async (id) => {
  */
 exports.getUsuarioByNameRepository = async (NombreUsuario) => {
 
-    const pool = await getConnection();
+    const pool = await getSQLConnection();
 
     try {
 
-        const usuarioEncontrado = await pool.request().input('NombreUsuario', sql.NVarChar, `%${NombreUsuario}%`).query(queriesUsuarios.getUsuarioByName)
+        const usuarioEncontrado = await pool.request().input('NombreUsuario', sql.NVarChar, `%${NombreUsuario}%`).query(usuarioQueries.getUsuarioByName)
 
         if(usuarioEncontrado.recordset.length == 0){
             console.log("Usuario no encontrado");
@@ -88,7 +88,7 @@ exports.getUsuarioByNameRepository = async (NombreUsuario) => {
 exports.createUsuarioRepository = async (usuario) => {
 
     const { NombreUsuario, Correo, Direccion, FechaRegistro } = usuario;
-    const pool = await getConnection();
+    const pool = await getSQLConnection();
 
     try {
 
@@ -97,7 +97,7 @@ exports.createUsuarioRepository = async (usuario) => {
         .input('Correo', sql.NVarChar, Correo)
         .input('Direccion', sql.NVarChar, Direccion)
         .input('FechaRegistro', sql.Date, FechaRegistro)
-        .query(queriesUsuarios.addUsuario)
+        .query(usuarioQueries.addUsuario)
 
         return usuarioNuevo.recordset
 
@@ -118,7 +118,7 @@ exports.createUsuarioRepository = async (usuario) => {
 exports.updateUsuarioRepository = async (id, usuario) => {
 
     const { NombreUsuario, Correo, Direccion, FechaRegistro } = usuario;
-    const pool = await getConnection();
+    const pool = await getSQLConnection();
 
     try {
 

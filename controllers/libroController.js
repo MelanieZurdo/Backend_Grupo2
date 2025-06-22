@@ -1,4 +1,4 @@
-const librosService = require('../services/librosService')
+const librosService = require('../services/libroService')
 
 //Obtengo todos los libros - SQL
 exports.readAllBooks = async (req, res) => {

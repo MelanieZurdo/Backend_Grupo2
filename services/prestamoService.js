@@ -1,6 +1,6 @@
 const prestamoRepository = require('../repositories/prestamoRepository.js');
 const usuarioRepository = require('../repositories/usuarioRepository.js');
-const libroRepository = require('../repositories/librosSQLRepository.js');
+const libroRepository = require('../repositories/libroRepository.js');
 
 
 exports.getPrestamos = async (filters = {}) => {
