@@ -6,13 +6,14 @@ const PORT = 3000
 const routerUsuario = require('./routers/usuarioRouter.js');
 
 
-app.use('/usuario', routerUsuario);
+app.use('/api/usuario', routerUsuario);
 
-app.get('/', (req, res) => {
+//borralo
+app.get('/api', (req, res) => {
     res.send("Servidor funcionando")
 })
 
-
+//borralo
 app.listen(PORT, HOSTNAME, () => {
     console.log(`El servidor esta corriendo en: http://${HOSTNAME}:${PORT}`)
 })

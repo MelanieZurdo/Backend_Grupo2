@@ -1,0 +1,31 @@
+@api = http://127.0.0.1:3000/api
+
+GET {{api}}/usuario HTTP/1.1
+
+#####
+GET {{api}}/usuario/3 HTTP/1.1
+
+#####
+GET {{api}}/usuario/nombre/pla HTTP/1.1
+
+#####
+
+POST {{api}}/usuario/ HTTP/1.1
+Content-Type: application/json
+
+{
+    "NombreUsuario": "Lucas Diaz",
+    "Correo": "lucas.Diaz@example.com",
+    "Direccion": "palermo 123, caba",
+    "FechaRegistro": "2023-01-15T00:00:00.000Z"
+}
+
+####
+
+PATCH {{api}}/usuario/3 HTTP/1.1
+Content-Type: application/json
+
+{
+    "Correo": "lu.mero@example.com",
+    "Direccion": "Calle sol 200, Valencia"
+}
