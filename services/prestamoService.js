@@ -1,9 +1,7 @@
 const prestamoRepository = require('../repositories/prestamoRepository.js');
-const usuarioRepository = require('../repositories/usuario.js');
-const libroRepository = require('../repositories/libro.js');
-const { withTransaction } = require('../database/transaccion.js');
+const usuarioRepository = require('../repositories/usuarioRepository.js');
+const libroRepository = require('../repositories/librosSQLRepository.js');
 
-// TODO: Corregir fechas que No sale la hora
 
 exports.getPrestamos = async (filters = {}) => {
     try {
@@ -12,6 +10,7 @@ exports.getPrestamos = async (filters = {}) => {
             throw new Error("Not Found: Prestamos no encontrados");
         }
         return prestamos;
+
     } catch (error) {
         throw error;
     }
@@ -19,12 +18,12 @@ exports.getPrestamos = async (filters = {}) => {
 
 exports.createPrestamo = async ({ idUsuario, idLibro }) => {
     try {
-        const usuario = await usuarioRepository.findById(idUsuario);
+        const usuario = await usuarioRepository.getUsuarioByIdRepository(idUsuario);
         if (!usuario) {
             throw new Error('Not Found: Usuario no encontrado');
         }
 
-        const libro = await libroRepository.findById(idLibro);
+        const libro = await libroRepository.getBooksByIdAuthorRepository(idLibro);
         if (!libro) {
             throw new Error('Not Found: Libro no encontrado');
         }
@@ -32,10 +31,9 @@ exports.createPrestamo = async ({ idUsuario, idLibro }) => {
             throw new Error('Conflicto: El libro ya está prestado');
         }
 
-        return await withTransaction(async (transaction) => {
-            await libroRepository.updateDisponibilidad(idLibro, false, transaction);
-            return await prestamoRepository.savePrestamo({idUsuario, idLibro}, transaction);
-        });
+        await libroRepository.putBookAvailabilityRepository(idLibro, { Disponibilidad: false });
+        return  await prestamoRepository.savePrestamo({ idUsuario, idLibro });
+
     } catch (error) {
         throw error;
     }
@@ -51,10 +49,9 @@ exports.updateEstadoPrestamo = async (idPrestamo, activo) => {
             throw new Error('Conflicto: Solo se puede actualizar el estado de préstamos activos');
         }
 
-        return await withTransaction(async (transaction) => {
-            await libroRepository.updateDisponibilidad(prestamo.IdLibro, true, transaction);
-            return await prestamoRepository.updatePrestamo(idPrestamo, activo, transaction);
-        });
+        await libroRepository.putBookAvailabilityRepository(prestamo.idLibro, { Disponibilidad: true });
+        return await prestamoRepository.updatePrestamo(idPrestamo, activo);
+
     } catch (error) {
         throw error;
     }

@@ -1,4 +1,4 @@
-@baseUrl = http://127.0.0.1:3000
+@baseUrl = http://127.0.0.1:3000/api
 
 ### Obtener todos los préstamos (sin filtros)
 GET {{baseUrl}}/prestamos
@@ -25,16 +25,6 @@ GET {{baseUrl}}/prestamos?idUsuario=1&idLibro=2&activo=false
 
 ###
 
-### Bad Request: idUsuario inválido (no numérico)
-GET {{baseUrl}}/prestamos?idUsuario=abc
-
-###
-
-### Bad Request: activo inválido (no booleano)
-GET {{baseUrl}}/prestamos?activo=notabool
-
-###
-
 ### Crear un préstamo: caso exitoso
 POST {{baseUrl}}/prestamos
 Content-Type: application/json
@@ -53,16 +43,6 @@ Content-Type: application/json
 {
   "idLibro": 1,
   "idUsuario": 2
-}
-
-###
-
-### Bad Request: falta campo idUsuario
-POST {{baseUrl}}/prestamos
-Content-Type: application/json
-
-{
-  "idLibro": 1
 }
 
 ###
@@ -116,45 +96,5 @@ Content-Type: application/json
 {
   "activo": false
 }
-
-###
-
-### Bad Request: idPrestamo no numérico
-PATCH {{baseUrl}}/prestamos/abc
-Content-Type: application/json
-
-{
-  "activo": false
-}
-
-###
-
-### Bad Request: activo no es booleano
-PATCH {{baseUrl}}/prestamos/1
-Content-Type: application/json
-
-{
-  "activo": "abc"
-}
-
-###
-
-### Eliminar un préstamo: caso exitoso
-DELETE {{baseUrl}}/prestamos/1
-
-###
-
-### Not Found: idPrestamo no encontrado
-DELETE {{baseUrl}}/prestamos/9999
-
-###
-
-### Bad Resquest: idPrestamo no numérico
-DELETE {{baseUrl}}/prestamos/abc
-
-###
-
-### Conflict: prestamo activo (colocar el ID de un préstamo activo = true)
-DELETE {{baseUrl}}/prestamos/5
 
 ###
