@@ -15,14 +15,11 @@ exports.getAllUsuariosRepository = async () => {
         return usuarios.recordset
 
     } catch (error) {
-
-        console.log("ERROR al intentar traer todos los usuarios - getAllUsuariosRepository " + error)
-        throw Error("ERROR " + error)
-
-    } finally {
-
+        console.log("Error en getAllUsuariosRepository - Repository " + error)
+        throw Error("Error en getAllUsuariosRepository - Repository " + error)
+    } 
+    finally {
         pool.close()
-
     }
 
 }
@@ -45,9 +42,10 @@ exports.getUsuarioByIdRepository = async (id) => {
         }
 
     } catch (error) {
-        console.log("ERROR al intentar encontrar usuario - getUsuarioById  " + error)
-        throw Error("ERROR getUsuarioById  " + error)
-    } finally {
+        console.log("Error en getUsuarioByIdRepository - Repository " + error)
+        throw Error("Error en getUsuarioByIdRepository - Repository " + error)
+    }
+    finally {
         pool.close()
     }
 }
@@ -71,14 +69,11 @@ exports.getUsuarioByNameRepository = async (NombreUsuario) => {
         }
 
     } catch (error) {
-
-        console.log("ERROR al intentar encontrar usuario - getUsuarioByNameRepository " + error)
-        throw Error("Error getUsuarioByNameRepository" + error)
-
-    } finally {
-
+        console.log("Error en getUsuarioByNameRepository - Repository " + error)
+        throw Error("Error en getUsuarioByNameRepository - Repository " + error)
+    }
+    finally {
         pool.close()
-
     }
 }
 
@@ -96,18 +91,16 @@ exports.createUsuarioRepository = async (usuario) => {
         .input('NombreUsuario', sql.NVarChar, NombreUsuario)
         .input('Correo', sql.NVarChar, Correo)
         .input('Direccion', sql.NVarChar, Direccion)
-        .input('FechaRegistro', sql.Date, FechaRegistro)
+        .input('FechaRegistro', sql.DateTime, FechaRegistro)
         .query(usuarioQueries.addUsuario)
 
         return usuarioNuevo.recordset
 
     } catch (error) {
-
-        console.log("ERROR al intentar crear un nuevo usuario - createNewFrontendLanguageRepository " + error)
-        throw Error("ERROR createNewFrontendLanguageRepository " + error)
-
-    } finally {
-
+        console.log("Error en createUsuarioRepository - Repository " + error)
+        throw Error("Error en createUsuarioRepository - Repository " + error)
+    } 
+    finally {
         pool.close()
     }
 }
@@ -140,7 +133,7 @@ exports.updateUsuarioRepository = async (id, usuario) => {
             queryActualizada += 'Direccion = @Direccion, '
         }
         if (FechaRegistro != null) {
-            requestActualizado.input('FechaRegistro', sql.Date, FechaRegistro)
+            requestActualizado.input('FechaRegistro', sql.DateTime, FechaRegistro)
             queryActualizada += 'FechaRegistro = @FechaRegistro, '
         }
 
@@ -157,14 +150,11 @@ exports.updateUsuarioRepository = async (id, usuario) => {
         return { NombreUsuario, Correo, Direccion, FechaRegistro }
 
     } catch (error) {
-
-        console.log("ERROR al intentar actualizar el lenguaje - updateUsuarioRepository " + error)
-        throw Error("ERROR updateUsuarioRepository " + error)
-
-    } finally {
-
+        console.log("Error en updateUsuarioRepository - Repository " + error)
+        throw Error("Error en updateUsuarioRepository - Repository " + error)
+    } 
+    finally {
         pool.close()
-
     }
 }
 

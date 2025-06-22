@@ -1,5 +1,6 @@
 module.exports = {
     getAllBooks: 'SELECT * FROM BIBLIOTECA.dbo.LIBRO',
+    getBooksByID:'SELECT * FROM BIBLIOTECA.dbo.LIBRO WHERE IdLibro=@IdLibro',
     postNewBook: `INSERT INTO BIBLIOTECA.dbo.LIBRO
     (Titulo, IdAutor, FechaPublicacion, Genero, Disponibilidad)
     OUTPUT INSERTED.*

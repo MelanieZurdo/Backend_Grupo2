@@ -11,6 +11,17 @@ exports.getAllBooks = async () => {
     }
 }
 
+//Obtengo libro por ID - SQL
+exports.getBooksById = async (IdLibro) => {
+    try {
+        return await libroRepository.getBooksByIdRepository(IdLibro)
+    }
+    catch (error) {
+        console.log("Error en getBooksById - Repository " + error)
+        throw Error("Error en getBooksById - Repository " + error)
+    }
+}
+
 //Creo un nuevo libro - SQL
 exports.postNewBook = async (libroNuevo) => {
     try {

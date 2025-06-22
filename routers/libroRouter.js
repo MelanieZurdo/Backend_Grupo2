@@ -9,6 +9,9 @@ librosRouter.use(express.json())
 //Obtengo todos los libros - SQL
 librosRouter.get('/', libroController.readAllBooks)
 
+//Obtengo libro por ID - SQL
+librosRouter.get('/:IdLibro', libroController.readBookByID)
+
 //Creo un nuevo libro - SQL
 librosRouter.post('/', libroController.createNewBook)
 

@@ -3,6 +3,9 @@
 ### Obtengo todos los libros - SQL
 GET {{api}}/libros HTTP/1.1
 
+### Obtengo libro por ID - SQL
+GET {{api}}/libros/1 HTTP/1.1
+
 ### Creo un nuevo libro - SQL
 POST {{api}}/libros HTTP/1.1
 Content-Type: application/json

@@ -3,45 +3,49 @@ const usuarioRepository = require('../repositories/usuarioRepository.js');
 const libroRepository = require('../repositories/libroRepository.js');
 
 
-exports.getPrestamos = async (filters = {}) => {
+exports.getPrestamosService = async (filters = {}) => {
     try {
-        const prestamos = await prestamoRepository.getPrestamos(filters);
+        const prestamos = await prestamoRepository.getPrestamosRepository(filters);
         if (!prestamos || prestamos.length === 0) {
             throw new Error("Not Found: Prestamos no encontrados");
         }
         return prestamos;
-
     } catch (error) {
-        throw error;
+        console.log("Error en getPrestamosService - Service " + error)
+        throw Error("Error en getPrestamosService - Service " + error)
     }
 };
 
-exports.createPrestamo = async ({ idUsuario, idLibro }) => {
+exports.createPrestamoService = async ({ IdUsuario, IdLibro }) => {
     try {
-        const usuario = await usuarioRepository.getUsuarioByIdRepository(idUsuario);
+        const usuario = await usuarioRepository.getUsuarioByIdRepository(IdUsuario);
+        
         if (!usuario) {
             throw new Error('Not Found: Usuario no encontrado');
         }
 
-        const libro = await libroRepository.getBooksByIdAuthorRepository(idLibro);
+        const libro = await libroRepository.getBooksByIdRepository(IdLibro);
+        
         if (!libro) {
             throw new Error('Not Found: Libro no encontrado');
         }
-        if (!libro.Disponibilidad) {
+        if (!libro[0].Disponibilidad) {
             throw new Error('Conflicto: El libro ya está prestado');
+            
         }
 
-        await libroRepository.putBookAvailabilityRepository(idLibro, { Disponibilidad: false });
-        return  await prestamoRepository.savePrestamo({ idUsuario, idLibro });
+        await libroRepository.putBookAvailabilityRepository(IdLibro, { Disponibilidad: false });
+        return  await prestamoRepository.savePrestamoRepository({ IdUsuario, IdLibro });
 
     } catch (error) {
-        throw error;
+        console.log("Error en createPrestamoService - Service " + error)
+        throw Error("Error en createPrestamoService - Service " + error)
     }
 };
 
-exports.updateEstadoPrestamo = async (idPrestamo, activo) => {
+exports.updateEstadoPrestamoService = async (idPrestamo, activo) => {
     try {
-        const prestamo = await prestamoRepository.getPrestamoById(idPrestamo);
+        const prestamo = await prestamoRepository.getPrestamoByIdRepository(idPrestamo);
         if (!prestamo) {
             throw new Error('Not Found: Prestamo no encontrado');
         }
@@ -50,9 +54,10 @@ exports.updateEstadoPrestamo = async (idPrestamo, activo) => {
         }
 
         await libroRepository.putBookAvailabilityRepository(prestamo.idLibro, { Disponibilidad: true });
-        return await prestamoRepository.updatePrestamo(idPrestamo, activo);
+        return await prestamoRepository.updatePrestamoRepository(idPrestamo, activo);
 
     } catch (error) {
-        throw error;
+        console.log("Error en updateEstadoPrestamoService - Service " + error)
+        throw Error("Error en updateEstadoPrestamoService - Service " + error)
     }
 };

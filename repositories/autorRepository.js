@@ -10,9 +10,10 @@ exports.getAllAutorRepository = async () => {
         // console.log('funkaa');
         return result.recordset;
     } catch (error) {
-        console.error("Error en getAllAutorRepository: ", error);
-        throw Error("Error en getAllAutorRepository: ", error);
-    } finally {
+        console.log("Error en getAllAutorRepository - Repository " + error)
+        throw Error("Error en getAllAutorRepository - Repository " + error)
+    }
+    finally {
         pool.close()
     }
 }
@@ -26,7 +27,7 @@ exports.createAutorRepository = async (autorNuevo) => {
         const resultado = await pool.request()
             .input('NombreAutor', sql.NVarChar, NombreAutor)
             .input('Nacionalidad', sql.NVarChar, Nacionalidad)
-            .input('FechaNacimiento', sql.Date, FechaNacimiento)
+            .input('FechaNacimiento', sql.DateTime, FechaNacimiento)
             .query(autorQueries.addAutor);
 
 
@@ -34,9 +35,10 @@ exports.createAutorRepository = async (autorNuevo) => {
 
 
     } catch (error) {
-        console.log("createNewFrontendLanguageRepository - " + error)
-        throw Error("Error al intentar crear el nuevo lenguaje: - " + error)
-    } finally {
+        console.log("Error en createAutorRepository - Repository " + error)
+        throw Error("Error en createAutorRepository - Repository " + error)
+    }
+    finally {
         pool.close();
     }
 }
@@ -59,9 +61,10 @@ exports.deleteAutorRepository = async (idAutor) => {
 
         }
     } catch (error) {
-        console.log('DeleteAutorRepository error')
-        throw Error('No se pudo eliminar autor' + error);
-    } finally {
+        console.log("Error en deleteAutorRepository - Repository " + error)
+        throw Error("Error en deleteAutorRepository - Repository " + error)
+    }
+    finally {
         pool.close();
     }
 }
@@ -101,16 +104,16 @@ exports.updateAutorRepository = async (idAutor, autorActualizado) => {
         const autorActualizado = await requestActualizado.query(queryActualizar);
 
         if (autorActualizado.rowsAffected[0] == 0) {
-            return null;                        
+            return null;
         }
 
-        return {NombreAutor, Nacionalidad, FechaNacimiento}
+        return { NombreAutor, Nacionalidad, FechaNacimiento }
 
     } catch (error) {
-
-        console.log("updateAutorRepository - " + error)
-        throw Error("Error al intentar actualizar autor: - " + error)
-    }finally{
+        console.log("Error en updateAutorRepository - Repository " + error)
+        throw Error("Error en updateAutorRepository - Repository " + error)
+    }
+    finally {
         pool.close();
     }
 }

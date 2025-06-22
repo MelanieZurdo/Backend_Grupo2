@@ -15,6 +15,31 @@ exports.readAllBooks = async (req, res) => {
     }
 }
 
+//Obtengo libro por ID - SQL
+exports.readBookByID = async (req, res) => {
+    try {
+        const IdLibro = req.params.IdLibro;
+
+        const booksByID = await librosService.getBooksById(IdLibro)
+
+        if (booksByID.length === 0) {
+            res.setHeader('Content-Type', 'text/plain')
+            res.status(404)
+            res.send('No se han podido obtener los libros por id del autor y su información')
+        }
+        else {
+            res.setHeader('Content-Type', 'application/json')
+            res.status(200)
+            res.send(booksByID)
+        }
+    } catch (error) {
+        res.setHeader('Content-Type', 'text/plain')
+        res.status(500)
+        res.send("No se han podido obtener los libros por id del autor y su información")
+        console.log("Error en readBooksByIdAuthor - Controller " + error)
+    }
+}
+
 //Creo un nuevo libro - SQL
 exports.createNewBook = async (req, res) => {
     try {

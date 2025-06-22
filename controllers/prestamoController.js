@@ -15,7 +15,7 @@ exports.readPreatamos = async (req, res) => {
             filters.activo = activo;
         }
 
-        const prestamos = await service.getPrestamos(filters);
+        const prestamos = await service.getPrestamosService(filters);
         res.setHeader('Content-Type', 'application/json')
         res.status(200).json(prestamos);
 
@@ -30,10 +30,10 @@ exports.readPreatamos = async (req, res) => {
 };
 
 exports.createPrestamo = async (req, res) => {
-    const { idUsuario, idLibro } = req.body;
+    const { IdUsuario, IdLibro } = req.body;
 
     try {
-        const prestamo = await service.createPrestamo({ idUsuario, idLibro });
+        const prestamo = await service.createPrestamoService({ IdUsuario, IdLibro });
         res.setHeader('Content-Type', 'application/json')
         res.status(201).json(prestamo);
 
@@ -55,7 +55,7 @@ exports.updatePrestamo = async (req, res) => {
     const { activo } = req.body;
 
     try {
-        const prestamo = await service.updateEstadoPrestamo(idPrestamo, activo);
+        const prestamo = await service.updateEstadoPrestamoService(idPrestamo, activo);
         res.setHeader('Content-Type', 'application/json')
         res.status(200).json(prestamo);
 

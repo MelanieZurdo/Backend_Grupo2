@@ -5,10 +5,8 @@ exports.readAllUsuarios = async (req, res) => {
     try {
         res.setHeader('Content-Type', 'application/json')
         res.status(200)
-        res.send(await usuarioService.getAllUsuarios())
-
+        res.send(await usuarioService.getAllUsuariosService())
     } catch (error) {
-
         console.log("ERROR en readAllUsuarios " + error)
         res.status(500).send( { code: 500, message: "ERROR al obtener los usuarios - readAllUsuarios"})
     }
@@ -16,10 +14,8 @@ exports.readAllUsuarios = async (req, res) => {
 
 exports.readUsuarioById = async (req, res) => {
     try {
-
         const id = req.params.id
-        const usuario = await usuarioService.getUsuarioById(id)
-
+        const usuario = await usuarioService.getUsuarioByIdService(id)
         if (usuario.length === 0) {
             return res.status(404).send("No se encontro un usuario con el ID: " + id)
         }
@@ -27,10 +23,8 @@ exports.readUsuarioById = async (req, res) => {
             res.setHeader('Content-Type', 'application/json')
             res.status(200)
             res.send(usuario)
-        }
-        
-    } catch (error) {
-        
+        }        
+    } catch (error) {        
         console.log("ERROR en readUsuarioById " + error)
         res.status(500).send({ code: 500, message: "ERROR al buscar usuario - readUsuarioById" })
     }
@@ -40,7 +34,7 @@ exports.readUsuarioByName = async (req, res) => {
     try {
 
         const {nombre} = req.params
-        const usuario = await usuarioService.getUsuarioByName(nombre)
+        const usuario = await usuarioService.getUsuarioByNameService(nombre)
 
         if (usuario.length == 0) {
             return res.status(404).send("No se encontro un usuario con el nombre: " + nombre)
@@ -62,7 +56,7 @@ exports.createNuevoUsuario = async (req, res) => {
     try {
 
         let usuarioNuevo = req.body;
-        res.send(await usuarioService.createUsuario(usuarioNuevo))
+        res.send(await usuarioService.createUsuarioService(usuarioNuevo))
 
     } catch (error) {
 
@@ -78,7 +72,7 @@ exports.updateEditarUsuario = async (req, res) => {
         const usuarioEditado = req.body;
         const id = req.params.id;
 
-        const usuario = await usuarioService.updateUsuario(id, usuarioEditado)
+        const usuario = await usuarioService.updateUsuarioService(id, usuarioEditado)
 
         if (usuario.length === 0) {
             return res.status(404).send("No se encontro un usuario con el ID: " + id)

@@ -21,7 +21,7 @@ GET {{api}}/prestamos?activo=true
 ###
 
 ### Obtener préstamos filtrando por varios parámetros
-GET {{api}}/prestamos?idUsuario=1&idLibro=2&activo=false
+GET {{api}}/prestamos?idUsuario=3&idLibro=1&activo=true
 
 ###
 
@@ -30,8 +30,8 @@ POST {{api}}/prestamos
 Content-Type: application/json
 
 {
-  "idLibro": 1,
-  "idUsuario": 2
+  "IdLibro": 12,
+  "IdUsuario": 8
 }
 
 ###
@@ -41,8 +41,9 @@ POST {{api}}/prestamos
 Content-Type: application/json
 
 {
-  "idLibro": 1,
-  "idUsuario": 2
+  "IdLibro": 11,
+  "IdUsuario": 2,
+  "FechaPrestamo":"2019-05-01"
 }
 
 ###
@@ -52,8 +53,8 @@ POST {{api}}/prestamos
 Content-Type: application/json
 
 {
-  "idLibro": 1000,
-  "idUsuario": 2
+  "IdLibro": 11,
+  "IdUsuario": 2,
 }
 
 ###
@@ -63,8 +64,8 @@ POST {{api}}/prestamos
 Content-Type: application/json
 
 {
-  "idLibro": 1,
-  "idUsuario": 1000
+  "IdLibro": 11,
+  "IdUsuario": 2,
 }
 
 ###

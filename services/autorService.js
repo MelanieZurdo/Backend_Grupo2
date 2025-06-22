@@ -6,8 +6,8 @@ exports.autorGetAllService = async () => {
 
         return resultado;
     } catch (error) {
-        console.log('error obteniendo GET ALL autorRepository' + error);
-        throw error;
+        console.log("Error en autorGetAllService - Service " + error)
+        throw Error("Error en autorGetAllService - Service " + error)
     }
 }
 
@@ -15,8 +15,8 @@ exports.autorCreateService = async (autorNuevo) => {
     try {
         return await autorRepository.createAutorRepository(autorNuevo);
     } catch (error) {
-        console.log('error usando autorCreateService' + error);
-        throw error;
+        console.log("Error en autorCreateService - Service " + error)
+        throw Error("Error en autorCreateService - Service " + error)
     }
 }
 
@@ -24,7 +24,8 @@ exports.autorDeleteService = async (idAutor) => {
     try {
         return await autorRepository.deleteAutorRepository(idAutor);
     } catch (error) {
-        console.log('Error usando autorDeleteService' + error);
+        console.log("Error en autorDeleteService - Service " + error)
+        throw Error("Error en autorDeleteService - Service " + error)
     }
 }
 
@@ -32,8 +33,7 @@ exports.autorUpdateService = async (idAutor, autorActualizado) =>{
     try {
         return await autorRepository.updateAutorRepository(idAutor, autorActualizado)
     } catch (error) {
-
-        console.log("Error en autorUpdateService  - " + error)
-        throw Error("Error en el service: " + error)
+        console.log("Error en autorUpdateService - Service " + error)
+        throw Error("Error en autorUpdateService - Service " + error)
     }
 }

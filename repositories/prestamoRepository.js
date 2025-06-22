@@ -3,7 +3,7 @@ const { getSQLConnection } = require('../database/conexion')
 const prestamoQueries = require('../database/queries/prestamoQueries');
 
 
-exports.getPrestamos = async (filters) => {
+exports.getPrestamosRepository = async (filters) => {
     const pool = await getSQLConnection();
     let query = prestamoQueries.getPrestamos;
     const params = {};
@@ -30,13 +30,15 @@ exports.getPrestamos = async (filters) => {
         const result = await request.query(query);
         return result.recordset;
     } catch (error) {
-        throw Error(`Error al buscar préstamos`);
-    } finally {
+        console.log("Error en getPrestamosRepository - Repository " + error)
+        throw Error("Error en getPrestamosRepository - Repository " + error)
+    }
+    finally {
         pool.close()
     }
 };
 
-exports.getPrestamoById = async (idPrestamo) => {
+exports.getPrestamoByIdRepository = async (idPrestamo) => {
     const pool = await getSQLConnection();
     try {
         const result = await pool.request()
@@ -44,28 +46,35 @@ exports.getPrestamoById = async (idPrestamo) => {
             .query(prestamoQueries.getPrestamoById);
         return result.recordset[0];
     } catch (error) {
-        throw Error(`Error al buscar préstamo por ID`);
-    } finally {
+        console.log("Error en getPrestamoByIdRepository - Repository " + error)
+        throw Error("Error en getPrestamoByIdRepository - Repository " + error)
+    }
+    finally {
         pool.close();
     }
 };
 
-exports.savePrestamo = async ({ idUsuario, idLibro }) => {
+exports.savePrestamoRepository = async ({ IdUsuario, IdLibro }) => {
     const pool = await getSQLConnection();
     const date = new Date();
+    
+    
     try {
         const result = await pool.request()
-            .input('IdUsuario', sql.Int, idUsuario)
-            .input('IdLibro', sql.Int, idLibro)
+            .input('IdUsuario', sql.Int, IdUsuario)
+            .input('IdLibro', sql.Int, IdLibro)
             .input('FechaPrestamo', sql.DateTime, date)
             .query(prestamoQueries.savePrestamo);
         return result.recordset[0];
-    } catch (error) {
-        throw Error(`Error al guardar préstamo`);
+    }catch (error) {
+        console.log("Error en savePrestamoRepository - Repository " + error)
+        throw Error("Error en savePrestamoRepository - Repository " + error)
+    }finally {
+        pool.close();
     }
 };
 
-exports.updatePrestamo = async (idPrestamo, activo, transaction) => {
+exports.updatePrestamoRepository = async (idPrestamo, activo, transaction) => {
     const pool = await getSQLConnection();
     const date = new Date();
     try {
@@ -76,6 +85,9 @@ exports.updatePrestamo = async (idPrestamo, activo, transaction) => {
             .query(prestamoQueries.updatePrestamo);
         return result.recordset[0];
     } catch (error) {
-        throw Error(`Error al actualizar préstamo`);
+        console.log("Error en updatePrestamoRepository - Repository " + error)
+        throw Error("Error en updatePrestamoRepository - Repository " + error)
+    }finally {
+        pool.close();
     }
 };

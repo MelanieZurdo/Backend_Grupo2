@@ -20,6 +20,25 @@ exports.getAllBooksRepository = async () => {
     }
 }
 
+//Obtengo libro por ID - SQL
+exports.getBooksByIdRepository = async (IdLibro) => {
+    const pool = await getSQLConnection();
+    try {
+        const resultado = await pool.request()
+            .input('IdLibro', sql.Int, IdLibro)
+            .query(libroQueries.getBooksByID);
+        console.table(resultado.recordset)
+        return resultado.recordset
+    }
+    catch (error) {
+        console.log("Error en getBooksByIdAuthor - Repository " + error)
+        throw Error("Error en getBooksByIdAuthor - Repository " + error)
+    }
+    finally {
+        pool.close();
+    }
+}
+
 //Creo un nuevo libro - SQL
 exports.postNewBookRepository = async (libroNuevo) => {
     const { Titulo, IdAutor, FechaPublicacion, Genero, Disponibilidad } = libroNuevo
@@ -29,7 +48,7 @@ exports.postNewBookRepository = async (libroNuevo) => {
         const resultado = await pool.request()
             .input('Titulo', sql.NVarChar, Titulo)
             .input('IdAutor', sql.Int, IdAutor)
-            .input('FechaPublicacion', sql.Date, FechaPublicacion)
+            .input('FechaPublicacion', sql.DateTime, FechaPublicacion)
             .input('Genero', sql.NVarChar, Genero)
             .input('Disponibilidad', sql.Bit, Disponibilidad)
             .query(libroQueries.postNewBook)
@@ -114,7 +133,7 @@ exports.putBookItemsByIdRepository = async (IdLibro, libroActualizado) => {
             query += 'IdAutor = @IdAutor, '
         }
         if (FechaPublicacion != null) {
-            request.input('FechaPublicacion', sql.Date, FechaPublicacion)
+            request.input('FechaPublicacion', sql.DateTime, FechaPublicacion)
             query += 'FechaPublicacion = @FechaPublicacion, '
         }
         if (Genero != null) {
