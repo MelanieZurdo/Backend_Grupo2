@@ -5,8 +5,7 @@ const app = express()
 const HOSTNAME = '127.0.0.1'
 const PORT = 3000
 
-app.use(express.json());
-app.use('/prestamos', prestamoRoutes);
+app.use('/api/prestamos', prestamoRoutes);
 
 app.listen(PORT, HOSTNAME, () => {
     console.log(`El servidor esta corriendo en: http://${HOSTNAME}:${PORT}`)
@@ -14,4 +13,4 @@ app.listen(PORT, HOSTNAME, () => {
 
 app.get('/', (req, res) => {
     res.send("Servidor funcionando")
- })
+})

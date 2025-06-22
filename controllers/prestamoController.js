@@ -16,12 +16,15 @@ exports.readPreatamos = async (req, res) => {
         }
 
         const prestamos = await service.getPrestamos(filters);
+        res.setHeader('Content-Type', 'application/json')
         res.status(200).json(prestamos);
 
     } catch (error) {
+        res.setHeader('Content-Type', 'application/json')
+
         if (error.message.includes('Not Found')) {
-        return res.status(404).json({ error: error.message });
-    }
+            return res.status(404).json({ error: error.message });
+        }
         return res.status(500).json({ error: error.message });
     }
 };
@@ -31,16 +34,18 @@ exports.createPrestamo = async (req, res) => {
 
     try {
         const prestamo = await service.createPrestamo({ idUsuario, idLibro });
+        res.setHeader('Content-Type', 'application/json')
         res.status(201).json(prestamo);
 
     } catch (error) {
+        res.setHeader('Content-Type', 'application/json')
+
         if (error.message.includes('Not Found')) {
             return res.status(404).json({ error: error.message });
         }
         if (error.message.includes('Conflicto')) {
             return res.status(409).json({ error: error.message });
         }
-
         return res.status(500).json({ error: error.message });
     }
 };
@@ -51,16 +56,18 @@ exports.updatePrestamo = async (req, res) => {
 
     try {
         const prestamo = await service.updateEstadoPrestamo(idPrestamo, activo);
+        res.setHeader('Content-Type', 'application/json')
         res.status(200).json(prestamo);
 
     } catch (error) {
+        res.setHeader('Content-Type', 'application/json')
+
         if (error.message.includes('Not Found')) {
             return res.status(404).json({ error: error.message });
         }
         if (error.message.includes('Conflicto')) {
             return res.status(409).json({ error: error.message });
         }
-
         return res.status(500).json({ error: error.message });
     }
 };

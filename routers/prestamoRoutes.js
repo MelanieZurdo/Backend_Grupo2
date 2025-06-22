@@ -1,10 +1,11 @@
-const { Router } = require('express');
+const express = require("express");
+const prestamoRouter = express.Router()
 const controller = require('../controllers/prestamoController.js');
 
-const router = Router();
+prestamoRouter.use(express.json());
 
-router.get('/', controller.readPreatamos);
-router.post('/', controller.createPrestamo);
-router.patch('/:idPrestamo', controller.updatePrestamo);
+prestamoRouter.get('/', controller.readPreatamos);
+prestamoRouter.post('/', controller.createPrestamo);
+prestamoRouter.patch('/:idPrestamo', controller.updatePrestamo);
 
-module.exports = router;
+module.exports = prestamoRouter;
