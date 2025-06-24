@@ -116,6 +116,24 @@ exports.getBooksByIdAuthorRepository = async (IdAutor) => {
     }
 }
 
+//Obtengo un libro por su ID - SQL
+exports.getBookByIdRepository = async (IdLibro) => {
+    const pool = await getSQLConnection();
+    try {
+        const resultado = await pool.request()
+            .input('IdLibro', sql.Int, IdLibro)
+            .query(libroQueries.getBookById);
+        console.table(resultado.recordset)
+        return resultado.recordset[0]
+    } catch (error) {
+        console.log("Error en getBookByIdRepository - Repository " + error)
+        throw Error("Error en getBookByIdRepository - Repository " + error)
+    }
+    finally {
+        pool.close();
+    }
+}
+
 //Modifico items de manera opcional de un libro mediante su ID - SQL
 exports.putBookItemsByIdRepository = async (IdLibro, libroActualizado) => {
     const { Titulo, IdAutor, FechaPublicacion, Genero, Disponibilidad } = libroActualizado;

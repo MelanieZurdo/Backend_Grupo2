@@ -1,15 +1,15 @@
 @api = http://127.0.0.1:3000/api
 
+### Obtiene todos los usuarios ###
 GET {{api}}/usuario HTTP/1.1
 
-#####
+### Obtiene un usuario atravez de su ID - idUsuario ###
 GET {{api}}/usuario/3 HTTP/1.1
 
-#####
+### Filtra y obtiene un usuario o varios usuarios segun el nombre o parte del nombre ###
 GET {{api}}/usuario/nombre/pla HTTP/1.1
 
-#####
-
+### Crea un nuevo usuario ###
 POST {{api}}/usuario/ HTTP/1.1
 Content-Type: application/json
 
@@ -20,8 +20,7 @@ Content-Type: application/json
     "FechaRegistro": "2023-01-15T00:00:00.000Z"
 }
 
-####
-
+### Actualiza un usuario filtrando segun su ID - idUsuario ###
 PATCH {{api}}/usuario/3 HTTP/1.1
 Content-Type: application/json
 
