@@ -20,25 +20,6 @@ exports.getAllBooksRepository = async () => {
     }
 }
 
-/* //Obtengo libro por ID - SQL
-exports.getBooksByIdRepository = async (IdLibro) => {
-    const pool = await getSQLConnection();
-    try {
-        const resultado = await pool.request()
-            .input('IdLibro', sql.Int, IdLibro)
-            .query(libroQueries.getBooksByID);
-        console.table(resultado.recordset)
-        return resultado.recordset
-    }
-    catch (error) {
-        console.log("Error en getBooksByIdAuthor - Repository " + error)
-        throw Error("Error en getBooksByIdAuthor - Repository " + error)
-    }
-    finally {
-        pool.close();
-    }
-} */
-
 //Creo un nuevo libro - SQL
 exports.postNewBookRepository = async (libroNuevo) => {
     const { Titulo, IdAutor, FechaPublicacion, Genero, Disponibilidad } = libroNuevo
@@ -104,7 +85,7 @@ exports.getBooksByIdAuthorRepository = async (IdAutor) => {
         const resultado = await pool.request()
             .input('IdAutor', sql.Int, IdAutor)
             .query(libroQueries.getBooksByIdAuthor);
-        console.table(resultado.recordset)
+        //console.table(resultado.recordset)
         return resultado.recordset
     }
     catch (error) {
