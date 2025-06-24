@@ -22,10 +22,10 @@ exports.readBookByID = async (req, res) => {
 
         const booksByID = await librosService.getBooksById(IdLibro)
 
-        if (booksByID.length === 0) {
+        if (!booksByID || booksByID.length === 0) {
             res.setHeader('Content-Type', 'text/plain')
             res.status(404)
-            res.send('No se han podido obtener los libros por id del autor y su información')
+            res.send(`No existe un libro con el id : ${IdLibro}`)
         }
         else {
             res.setHeader('Content-Type', 'application/json')
@@ -35,7 +35,7 @@ exports.readBookByID = async (req, res) => {
     } catch (error) {
         res.setHeader('Content-Type', 'text/plain')
         res.status(500)
-        res.send("No se han podido obtener los libros por id del autor y su información")
+        res.send(`No existe un libro con el id : ${IdLibro}`)
         console.log("Error en readBooksByIdAuthor - Controller " + error)
     }
 }
@@ -66,7 +66,7 @@ exports.updateBookAvailability = async (req, res) => {
 
         const libros = await librosService.putBookAvailability(IdLibro, libroActualizado)
 
-        if (libros.length === 0) {
+        if (!libros || libros.length === 0) {
             res.setHeader('Content-Type', 'text/plain')
             res.status(404)
             res.send('No se ha podido modificar la disponibilidad del libro')
@@ -91,7 +91,7 @@ exports.readBooksByIdAuthor = async (req, res) => {
 
         const booksByAuthor = await librosService.getBooksByIdAuthor(IdAutor)
 
-        if (booksByAuthor.length === 0) {
+        if (!booksByAuthor || booksByAuthor.length === 0) {
             res.setHeader('Content-Type', 'text/plain')
             res.status(404)
             res.send('No se han podido obtener los libros por id del autor y su información')
@@ -117,7 +117,7 @@ exports.updateBookItemById = async (req, res) => {
 
         const libroModificado = await librosService.putBookItemById(IdLibro, libroActualizado)
 
-        if (libroModificado.length === 0) {
+        if (!libroModificado || libroModificado.length === 0) {
             res.setHeader('Content-Type', 'text/plain')
             res.status(404)
             res.send('No se han podido modificar los datos del libro')

@@ -24,11 +24,11 @@ exports.createPrestamoService = async ({ IdUsuario, IdLibro }) => {
             throw new Error('Not Found: Usuario no encontrado');
         }
 
-        const libro = await libroRepository.getBookByIdRepository(idLibro);
+        const libro = await libroRepository.getBookByIdRepository(IdLibro);
         if (!libro) {
             throw new Error('Not Found: Libro no encontrado');
         }
-        if (!libro[0].Disponibilidad) {
+        if (!libro.Disponibilidad) {
             throw new Error('Conflicto: El libro ya está prestado');
             
         }
@@ -53,7 +53,7 @@ exports.updateEstadoPrestamoService = async (idPrestamo, activo) => {
         }
 
         await libroRepository.putBookAvailabilityRepository(prestamo.IdLibro, { Disponibilidad: true });
-        return await prestamoRepository.updatePrestamo(idPrestamo, activo);
+        return await prestamoRepository.updatePrestamoRepository(idPrestamo, activo);
 
     } catch (error) {
         console.log("Error en updateEstadoPrestamoService - Service " + error)

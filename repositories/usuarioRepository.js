@@ -91,7 +91,7 @@ exports.createUsuarioRepository = async (usuario) => {
         .input('NombreUsuario', sql.NVarChar, NombreUsuario)
         .input('Correo', sql.NVarChar, Correo)
         .input('Direccion', sql.NVarChar, Direccion)
-        .input('FechaRegistro', sql.DateTime, FechaRegistro)
+        .input('FechaRegistro', sql.NVarChar, FechaRegistro)
         .query(usuarioQueries.addUsuario)
 
         return usuarioNuevo.recordset
@@ -133,7 +133,7 @@ exports.updateUsuarioRepository = async (id, usuario) => {
             queryActualizada += 'Direccion = @Direccion, '
         }
         if (FechaRegistro != null) {
-            requestActualizado.input('FechaRegistro', sql.DateTime, FechaRegistro)
+            requestActualizado.input('FechaRegistro', sql.NVarChar, FechaRegistro)
             queryActualizada += 'FechaRegistro = @FechaRegistro, '
         }
 

@@ -27,7 +27,7 @@ app.get('/{*any}', (req, res) => {
     res.send("La ruta ingresada no es valida")
 })
 
-app.put('/{*any}', (req, res) => {
+app.patch('/{*any}', (req, res) => {
     res.setHeader('Content-Type', 'text/plain')
     res.status(404)
     res.send("La ruta ingresada no es valida")

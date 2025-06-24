@@ -14,7 +14,7 @@ exports.getAllBooks = async () => {
 //Obtengo libro por ID - SQL
 exports.getBooksById = async (IdLibro) => {
     try {
-        return await libroRepository.getBooksByIdRepository(IdLibro)
+        return await libroRepository.getBookByIdRepository(IdLibro)
     }
     catch (error) {
         console.log("Error en getBooksById - Repository " + error)

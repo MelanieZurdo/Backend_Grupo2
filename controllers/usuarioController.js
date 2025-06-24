@@ -16,7 +16,7 @@ exports.readUsuarioById = async (req, res) => {
     try {
         const id = req.params.id
         const usuario = await usuarioService.getUsuarioByIdService(id)
-        if (usuario.length === 0) {
+        if (!usuario || usuario.length === 0) {
             return res.status(404).send("No se encontro un usuario con el ID: " + id)
         }
         else{
@@ -36,7 +36,7 @@ exports.readUsuarioByName = async (req, res) => {
         const {nombre} = req.params
         const usuario = await usuarioService.getUsuarioByNameService(nombre)
 
-        if (usuario.length == 0) {
+        if (!usuario || usuario.length === 0) {
             return res.status(404).send("No se encontro un usuario con el nombre: " + nombre)
         }
         else{
@@ -74,7 +74,7 @@ exports.updateEditarUsuario = async (req, res) => {
 
         const usuario = await usuarioService.updateUsuarioService(id, usuarioEditado)
 
-        if (usuario.length === 0) {
+        if (!usuario || usuario.length === 0) {
             return res.status(404).send("No se encontro un usuario con el ID: " + id)
         }
 

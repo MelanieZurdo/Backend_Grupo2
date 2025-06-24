@@ -27,7 +27,7 @@ exports.createAutorRepository = async (autorNuevo) => {
         const resultado = await pool.request()
             .input('NombreAutor', sql.NVarChar, NombreAutor)
             .input('Nacionalidad', sql.NVarChar, Nacionalidad)
-            .input('FechaNacimiento', sql.DateTime, FechaNacimiento)
+            .input('FechaNacimiento', sql.NVarChar, FechaNacimiento)
             .query(autorQueries.addAutor);
 
 

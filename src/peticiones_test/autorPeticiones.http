@@ -1,35 +1,25 @@
 @api = http://127.0.0.1:3000/api
 
-// Endpoint que obtiene todos los autores existentes
+###Endpoint que obtiene todos los autores existentes
 GET {{api}}/autor HTTP/1.1
 
-###
-
-//Endpoint para crear un autor
+###Endpoint para crear un autor
 POST {{api}}/autor HTTP/1.1
-
 Content-Type: application/json
-{
-    
+
+{    
     "NombreAutor": "Pepe",
     "Nacionalidad": "Colombiana",
-    "FechaNacimiento": "1940-09-03T00:00:00.000Z"
-
+    "FechaNacimiento": "1940-09-03"
 }
 
-###
+###Endpoint para eliminar registro de Autor mediante su id correspondiente
+DELETE {{api}}/autor/10
 
-
-//Endpoint para eliminar registro de Autor mediante su id correspondiente
-DELETE {{api}}/autor/20
-
-###
-
-//Endpoint para actualizar cualquier campo de un autor mediante su id correspondiente
+###Endpoint para actualizar cualquier campo de un autor mediante su id correspondiente
 PATCH {{api}}/autor/19
 Content-Type: application/json
+
 {
-    "NombreAutor": "Marta",
-    "Nacionalidad": "Colombiana",
-    "FechaNacimiento": "1940-09-03T00:00:00.000Z"
+    "NombreAutor": "Maria"
 }

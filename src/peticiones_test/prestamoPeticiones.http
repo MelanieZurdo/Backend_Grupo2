@@ -11,7 +11,7 @@ GET {{api}}/prestamos?idUsuario=1
 ###
 
 ### Obtener préstamos filtrando por idLibro
-GET {{api}}/prestamos?idLibro=2
+GET {{api}}/prestamos?idLibro=5
 
 ###
 
@@ -30,8 +30,8 @@ POST {{api}}/prestamos
 Content-Type: application/json
 
 {
-  "IdLibro": 12,
-  "IdUsuario": 8
+  "IdLibro": 15,
+  "IdUsuario": 3
 }
 
 ###
@@ -41,9 +41,8 @@ POST {{api}}/prestamos
 Content-Type: application/json
 
 {
-  "IdLibro": 11,
-  "IdUsuario": 2,
-  "FechaPrestamo":"2019-05-01"
+  "IdLibro": 15,
+  "IdUsuario": 2  
 }
 
 ###
@@ -53,8 +52,8 @@ POST {{api}}/prestamos
 Content-Type: application/json
 
 {
-  "IdLibro": 11,
-  "IdUsuario": 2,
+  "IdLibro": 30,
+  "IdUsuario": 2
 }
 
 ###
@@ -65,7 +64,7 @@ Content-Type: application/json
 
 {
   "IdLibro": 11,
-  "IdUsuario": 2,
+  "IdUsuario": 40
 }
 
 ###

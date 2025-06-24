@@ -8,7 +8,7 @@ exports.getAllBooksRepository = async () => {
     const pool = await getSQLConnection()
     try {
         const resultado = await pool.request().query(libroQueries.getAllBooks)
-        console.table(resultado.recordset)
+        //console.table(resultado.recordset)
         return resultado.recordset
 
     } catch (error) {
@@ -20,7 +20,7 @@ exports.getAllBooksRepository = async () => {
     }
 }
 
-//Obtengo libro por ID - SQL
+/* //Obtengo libro por ID - SQL
 exports.getBooksByIdRepository = async (IdLibro) => {
     const pool = await getSQLConnection();
     try {
@@ -37,7 +37,7 @@ exports.getBooksByIdRepository = async (IdLibro) => {
     finally {
         pool.close();
     }
-}
+} */
 
 //Creo un nuevo libro - SQL
 exports.postNewBookRepository = async (libroNuevo) => {
@@ -48,7 +48,7 @@ exports.postNewBookRepository = async (libroNuevo) => {
         const resultado = await pool.request()
             .input('Titulo', sql.NVarChar, Titulo)
             .input('IdAutor', sql.Int, IdAutor)
-            .input('FechaPublicacion', sql.DateTime, FechaPublicacion)
+            .input('FechaPublicacion', sql.NVarChar, FechaPublicacion)
             .input('Genero', sql.NVarChar, Genero)
             .input('Disponibilidad', sql.Bit, Disponibilidad)
             .query(libroQueries.postNewBook)
@@ -123,7 +123,7 @@ exports.getBookByIdRepository = async (IdLibro) => {
         const resultado = await pool.request()
             .input('IdLibro', sql.Int, IdLibro)
             .query(libroQueries.getBookById);
-        console.table(resultado.recordset)
+        //console.table(resultado.recordset)
         return resultado.recordset[0]
     } catch (error) {
         console.log("Error en getBookByIdRepository - Repository " + error)
@@ -151,7 +151,7 @@ exports.putBookItemsByIdRepository = async (IdLibro, libroActualizado) => {
             query += 'IdAutor = @IdAutor, '
         }
         if (FechaPublicacion != null) {
-            request.input('FechaPublicacion', sql.DateTime, FechaPublicacion)
+            request.input('FechaPublicacion', sql.NVarChar, FechaPublicacion)
             query += 'FechaPublicacion = @FechaPublicacion, '
         }
         if (Genero != null) {

@@ -4,7 +4,7 @@
 GET {{api}}/libros HTTP/1.1
 
 ### Obtengo libro por ID - SQL
-GET {{api}}/libros/1 HTTP/1.1
+GET {{api}}/libros/50 HTTP/1.1
 
 ### Creo un nuevo libro - SQL
 POST {{api}}/libros HTTP/1.1
@@ -19,7 +19,7 @@ Content-Type: application/json
 }
 
 ### Modifico disponibilidad del libro mediante su ID - SQL
-PUT {{api}}/libros/disponibilidad/21 HTTP/1.1
+PUT {{api}}/libros/disponibilidad/2 HTTP/1.1
 Content-Type: application/json
 
 {
@@ -27,18 +27,14 @@ Content-Type: application/json
 }
 
 ### Obtener todos los libros de un autor por (IdAutor) y la informacion del mismo - SQL
-GET {{api}}/libros/autor/19 HTTP/1.1
+GET {{api}}/libros/autor/50 HTTP/1.1
 
 ### Modifico items de manera opcional de un libro mediante su ID - SQL
-PATCH  {{api}}/libros/21 HTTP/1.1
+PATCH  {{api}}/libros/1 HTTP/1.1
 Content-Type: application/json
 
   {
-    "Titulo": "Largo",
-    "IdAutor": null,
-    "FechaPublicacion": null,
-    "Genero": "Historia",
-    "Disponibilidad": true
+    "Titulo": "Largo"
   }
     
 
