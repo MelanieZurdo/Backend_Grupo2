@@ -1,0 +1,100 @@
+@api = http://127.0.0.1:3000/api
+
+### Obtener todos los préstamos (sin filtros)
+GET {{api}}/prestamos
+
+###
+
+### Obtener préstamos filtrando por idUsuario
+GET {{api}}/prestamos?idUsuario=1
+
+###
+
+### Obtener préstamos filtrando por idLibro
+GET {{api}}/prestamos?idLibro=5
+
+###
+
+### Obtener préstamos filtrando por activo (true)
+GET {{api}}/prestamos?activo=true
+
+###
+
+### Obtener préstamos filtrando por varios parámetros
+GET {{api}}/prestamos?idUsuario=3&idLibro=1&activo=true
+
+###
+
+### Crear un préstamo: caso exitoso
+POST {{api}}/prestamos
+Content-Type: application/json
+
+{
+  "IdLibro": 15,
+  "IdUsuario": 3
+}
+
+###
+
+### Conflicto: libro ya prestado (correr después de crear un préstamo)
+POST {{api}}/prestamos
+Content-Type: application/json
+
+{
+  "IdLibro": 15,
+  "IdUsuario": 2  
+}
+
+###
+
+### No Encontrado: no se encontró idLibro
+POST {{api}}/prestamos
+Content-Type: application/json
+
+{
+  "IdLibro": 30,
+  "IdUsuario": 2
+}
+
+###
+
+### No Encontrado: no se encontró idUsuario
+POST {{api}}/prestamos
+Content-Type: application/json
+
+{
+  "IdLibro": 11,
+  "IdUsuario": 40
+}
+
+###
+
+### Actualizar estado de préstamo: caso exitoso (colocar el ID de un préstamo existente)
+PATCH {{api}}/prestamos/1
+Content-Type: application/json
+
+{
+  "activo": false
+}
+
+###
+
+### Conflicto: préstamo no activo (colocar el ID de un préstamo activo = false)
+PATCH {{api}}/prestamos/1
+Content-Type: application/json
+
+{
+  "activo": false
+}
+
+###
+
+### No Encontrado: idPrestamo no encontrado
+PATCH {{api}}/prestamos/1000
+Content-Type: application/json
+
+{
+  "activo": false
+}
+
+###
