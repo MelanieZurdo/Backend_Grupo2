@@ -56,7 +56,7 @@ database/Scripts_Database/Create_Database_Tables_.sql
 ### 5. Iniciar el servidor
 
 ```bash
-  npm start
+  npm run start
 ```
 
 ## Pruebas de la API
