@@ -19,7 +19,6 @@ exports.getPrestamosService = async (filters = {}) => {
 exports.createPrestamoService = async ({ IdUsuario, IdLibro }) => {
     try {
         const usuario = await usuarioRepository.getUsuarioByIdRepository(IdUsuario);
-        
         if (!usuario) {
             throw new Error('Not Found: Usuario no encontrado');
         }
@@ -30,7 +29,6 @@ exports.createPrestamoService = async ({ IdUsuario, IdLibro }) => {
         }
         if (!libro.Disponibilidad) {
             throw new Error('Conflicto: El libro ya está prestado');
-            
         }
 
         await libroRepository.putBookAvailabilityRepository(IdLibro, { Disponibilidad: false });
